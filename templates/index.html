@@ -50,6 +50,88 @@
                 </div>
             </div>
         </section>
+       <section id="skills" class="skills-section">
+            <div class="container">
+                <h2 class="skills-title">Skills</h2>
+
+                <div class="skills-grid">
+                    <!-- Hard Skills -->
+                    <div class="skills-column">
+                        <h3 class="skills-column-title">Hard Skills</h3>
+                        <div class="skills-cards">
+                            
+                            <div class="skill-card">
+                                <div class="skill-icon">
+                                    <i data-lucide="search"></i>
+                                </div>
+                                <div class="skill-info">
+                                    <h3>UX Researcher</h3>
+                                    <p>User interviews, usability testing</p>
+                                </div>
+                            </div>
+
+                            <div class="skill-card">
+                                <div class="skill-icon">
+                                    <i data-lucide="check-circle-2"></i>
+                                </div>
+                                <div class="skill-info">
+                                    <h3>Project Management</h3>
+                                    <p>Agile, Scrum</p>
+                                </div>
+                            </div>
+
+                            <div class="skill-card">
+                                <div class="skill-icon">
+                                    <i data-lucide="code-2"></i>
+                                </div>
+                                <div class="skill-info">
+                                    <h3>Programming</h3>
+                                    <p>Python, Java</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+        <div class="skills-column">
+                        <h3 class="skills-column-title">Soft Skills</h3>
+                        <div class="skills-cards">
+
+                            <div class="skill-card">
+                                <div class="skill-icon">
+                                    <i data-lucide="users"></i>
+                                </div>
+                                <div class="skill-info">
+                                    <h3>Leadership</h3>
+                                    <p>Proven track record in leading teams across diverse organizations</p>
+                                </div>
+                            </div>
+
+                            <div class="skill-card">
+                                <div class="skill-icon">
+                                    <i data-lucide="search"></i>
+                                </div>
+                                <div class="skill-info">
+                                    <h3>Problem Solving</h3>
+                                    <p>Analytical and solution-oriented mindset to navigate complex project</p>
+                                </div>
+                            </div>
+
+                            <div class="skill-card">
+                                <div class="skill-icon">
+                                    <i data-lucide="mic"></i>
+                                </div>
+                                <div class="skill-info">
+                                    <h3>Communication</h3>
+                                    <p>Articulate in conveying ideas and facilitating cross-functional team</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
     </main>
 
     <footer class="site-footer">
@@ -57,5 +139,15 @@
             <p>&copy; 2026 Fahira. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
         </div>
     </footer>
+   <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+         lucide.createIcons();
+
+        document.querySelectorAll('.skill-card').forEach(function (card) {
+            card.addEventListener('click', function () {
+                card.classList.toggle('is-raised');
+            });
+    });
+    </script>
 </body>
 </html>
