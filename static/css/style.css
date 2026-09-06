@@ -171,7 +171,7 @@ h1, .brand, .skills-title, .skills-column-title {
     border: 3px solid var(--ink);
 }
 
-/*tambahan untuk section skills (Individual Assignment 1)*/
+/*tambahan untuk section skills (Individual Assignment 1)*/ 
 .skills-section { /*skill section*/
     padding: 4rem 0 5rem;
     background: linear-gradient(90deg, #F7EED3 0%, #F9F8F6 100%);
@@ -198,18 +198,15 @@ h1, .brand, .skills-title, .skills-column-title {
     margin-bottom: 0.6rem;
 }
 
-/*bikin untuk 1 kartu skills*/
-.skills-card {
+/*container-nya cuma atur jarak antar kartu*/
+.skills-cards {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px #3C2A21(78, 86, 192, 0.06);
-    overflow: hidden;
 }
 
 /*bikin kolom untuk hard-skills*/
-.skills-column:first-child .skills-card {
+.skills-column:first-child .skill-card {
     background-color: var(--ink);
 }
 
@@ -220,7 +217,7 @@ h1, .brand, .skills-title, .skills-column-title {
 }
 
 /*bikin kolom untuk soft skills*/
-.skills-column:last-child .skills-card {
+.skills-column:last-child .skill-card {
     background-color: #FFFFFF;
 }
 
@@ -229,11 +226,67 @@ h1, .brand, .skills-title, .skills-column-title {
     align-items: flex-start;
     gap: 0.9rem;
     padding: 0.9rem 1.1rem; /*jarak kartu atas-bawah kiri-kanan*/
-    border-radius: 10px; 
-    box-shadow: 0 3px 10px #3C2A21(78, 86, 192, 0.10); /*biar kelihatan ngambang*/
-    cursor: pointer; 
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(60, 42, 33, 0.10); /*biar kelihatan ngambang*/
+    cursor: pointer;
     user-select: none; /*biar kyk gabisa dicopy*/
     transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/*bikin kesan timbul gt di card skills nya*/
+.skill-card:active {
+    transform: translateY(2px) scale(0.98);
+    box-shadow: 0 1px 4px rgba(60, 42, 33, 0.12);
+}
+
+.skill-card.is-raised {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(60, 42, 33, 0.22);
+}
+
+/*untuk ngatur antara ikon dri tiap skills dengan judul skills*/
+.skill-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: var(--ink);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+
+/*ngatur ikon skill*/
+.skill-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.2;
+}
+
+/*ngatur judul skills*/
+.skill-info h3 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.15rem;
+}
+
+/*ngatur kondisi default*/
+.skill-info p {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.35;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease, opacity 0.2s ease, margin-top 0.25s ease;
+}
+
+/*saat hover muncul*/
+.skill-card:hover .skill-info p {
+    max-height: 4rem;
+    opacity: 1;
+    margin-top: 0.25rem;
 }
 
 .site-footer {
