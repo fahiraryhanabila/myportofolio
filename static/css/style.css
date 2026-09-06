@@ -14,6 +14,30 @@
     --radius: 4px;
 }
 
+.section-title {
+    font-size: clamp(2rem,5vw, 2.8rem);
+    font-weight: 800;
+    color: var(--ink);
+    margin-bottom: 2rem;
+}
+
+.eduction-section {
+    padding: 4rem 0 5rem;
+}
+
+.eduction-list{
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.education-item {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #3C2A21(65, 45, 21, 0.15);
+}
+
 body {
     font-family: -apple-system, "Poppins", Roboto, Helvetica, Arial, sans-serif;
     color: var(--ink);
@@ -61,20 +85,24 @@ h1, .brand, .skills-title, .skills-column-title {
 }
 
 .hero {
-    padding: 4.5rem 0 5rem;
+    padding: 8rem 0 6rem;
+    background-image: url('/static/img/fahiraFix.png');
+    background-size: cover;
+    background-position: center;
 }
 
 .hero-grid {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    grid-template-areas:
-        "identity photo"
-        "details  photo";
-    gap: 1.5rem 3rem;
+    display: block;
 }
 
 .hero-identity {
     grid-area: identity;
+}
+
+.hero-identity h1 {
+    font-size: clamp(3rem, 7vw, 5rem);
+    line-height: 0.95;
+    margin-bottom: 1.8rem;
 }
 
 .hero-details {
@@ -98,7 +126,7 @@ h1, .brand, .skills-title, .skills-column-title {
 .bio {
     color: var(--text-muted);
     max-width: 480px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .meta-list {
@@ -141,13 +169,13 @@ h1, .brand, .skills-title, .skills-column-title {
     background-color: var(--accent);
 }
 
-.hero-photo {
+/*.hero-photo {
     grid-area: photo;
     align-self: center;
     position: relative;
 }
 
-/*untuk ngatur kotak dibelakang foto*/
+/*untuk ngatur kotak dibelakang foto
 .photo-block {
     position: absolute;
     top: 1.25rem;
@@ -157,10 +185,10 @@ h1, .brand, .skills-title, .skills-column-title {
     background-color: var(--accent);
     border-radius: var(--radius);
     z-index: 0;
-}
+}*/
 
 /*untuk foto utama*/
-.avatar {
+/*.avatar {
     position: relative;
     z-index: 1;
     display: block;
@@ -169,12 +197,13 @@ h1, .brand, .skills-title, .skills-column-title {
     object-fit: cover;
     border-radius: var(--radius);
     border: 3px solid var(--ink);
-}
+}*/
 
 /*tambahan untuk section skills (Individual Assignment 1)*/ 
 .skills-section { /*skill section*/
     padding: 4rem 0 5rem;
-    background: linear-gradient(90deg, #F7EED3 0%, #F9F8F6 100%);
+    background: linear-gradient(180deg, #F7F1DE 0%, #FFFFFF 100%);
+    /*background: linear-gradient(90deg, #F7EED3 0%, #F9F8F6 100%);*/
 }
 
 .skills-title {
