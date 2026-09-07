@@ -14,6 +14,13 @@
     --radius: 4px;
 }
 
+/*Pengaturan gambar responsive*/
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
 .section-title {
     font-size: clamp(2rem,5vw, 2.8rem);
     font-weight: 800;
@@ -43,6 +50,7 @@ body {
     color: var(--ink);
     background-color:var(--paper);
     line-height: 1.6;
+    overflow-x: hidden; /* jaga-jaga kalau ada elemen yang masih kelebihan*/
 }
 
 h1, .brand, .skills-title, .skills-column-title {
@@ -64,6 +72,8 @@ h1, .brand, .skills-title, .skills-column-title {
     justify-content: space-between;
     align-items: center;
     padding: 1.25rem 1.5rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
 .brand {
@@ -97,6 +107,7 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .hero-grid {
     display: block;
+    max-width: 560px;
 }
 
 .hero-identity {
@@ -122,11 +133,6 @@ h1, .brand, .skills-title, .skills-column-title {
     margin-bottom: 0.75rem;
 }
 
-.hero-identity h1 {
-    font-size: clamp(3rem, 7vw, 5rem);
-    line-height: 0.95;
-}
-
 .bio {
     color: var(--text-muted);
     max-width: 500px;
@@ -135,6 +141,7 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .meta-list {
     display: flex;
+    flex-wrap: wrap;
     gap: 2rem;
     margin-bottom: 2.5rem;
 }
@@ -175,7 +182,7 @@ h1, .brand, .skills-title, .skills-column-title {
 
 /*tambahan untuk credential-section*/
 .credentials-section {
-    padding: 8px 0 8px; 
+    padding: 8px 0 8px;
     background-color: #EEEDED;
 }
 
@@ -230,7 +237,7 @@ h1, .brand, .skills-title, .skills-column-title {
     text-align: right;
     display: flex;
     flex-direction: column;
-    align-items: flex-end; 
+    align-items: flex-end;
 }
 
 .about-title {
@@ -263,13 +270,19 @@ h1, .brand, .skills-title, .skills-column-title {
     background-color: var(--accent);
 }
 
-/* foto di kanan */
+/* foto di kanan — dibuat fully responsive */
+.about-photo {
+    display: flex;
+    justify-content: center;
+}
+
 .about-photo img {
     width: 220px;
-    height: 220px;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 16px;
-    display: block;
 }
 
 .about-highlights {
@@ -309,8 +322,8 @@ h1, .brand, .skills-title, .skills-column-title {
     line-height: 1.4;
 }
 
-/*tambahan untuk section skills (Individual Assignment 1)*/ 
-.skills-section { /*skill section*/
+/*tambahan untuk section skills (Individual Assignment 1)*/
+.skills-section { 
     padding: 4rem 0 5rem;
     background: linear-gradient(180deg, #F7F1DE 0%, #FFFFFF 100%);
 }
@@ -433,31 +446,82 @@ h1, .brand, .skills-title, .skills-column-title {
     font-size: 0.85rem;
 }
 
-@media (max-width: 600px) {
+/*RESPONSIVE — TABLET*/
+@media (max-width: 768px) {
     .hero-grid {
         grid-template-columns: 1fr;
-        grid-template-areas:
-            "identity"
-            "photo"
-            "details";
+        gap: 1.5rem;
     }
 
-    /*interactive design foto di hp, jdiin rata kiri*/
-    .hero-photo {
-        max-width: 140px;
-        justify-self: start;
+    .about-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1.75rem;
     }
 
-    /*mastiin di hp social links ttp rata kiri*/
-    .social-links {
-        justify-content: flex-start;
+    .about-text {
+        align-items: center;
+        text-align: center;
     }
 
-    /*skills grid di hp dibuat atas bawah*/
+    .about-desc {
+        max-width: 100%;
+    }
+
+    .about-photo img {
+        width: 200px;
+    }
+
+    .about-highlights {
+        align-items: center;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .highlight-item {
+        width: 100%;
+    }
+
     .skills-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
 }
 
+/* Pengaturan RESPONSIVE — MOBILE (<=600px) */
+@media (max-width: 600px) {
+    .hero {
+        padding: 4rem 0;
+    }
 
+    .hero-grid {
+        max-width: 100%;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+
+    .meta-list {
+        justify-content: center;
+    }
+
+    .credentials-list {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .credentials-item {
+        flex: 1 1 45%;
+        justify-content: center;
+    }
+
+    .about-photo img {
+        width: 160px;
+    }
+
+    .site-header .container {
+        justify-content: center;
+        text-align: center;
+    }
+}
