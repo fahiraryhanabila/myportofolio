@@ -175,8 +175,8 @@ h1, .brand, .skills-title, .skills-column-title {
 
 /*tambahan untuk credential-section*/
 .credentials-section {
-    padding: 100px 0 40px; 
-    background-color: #fce6a0;
+    padding: 8px 0 8px; 
+    background-color: #EEEDED;
 }
 
 /*ngatur crendential list nya gimana*/
@@ -459,3 +459,5 @@ h1, .brand, .skills-title, .skills-column-title {
         gap: 1.5rem;
     }
 }
+
+
