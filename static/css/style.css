@@ -91,6 +91,10 @@ h1, .brand, .skills-title, .skills-column-title {
     background-position: center;
 }
 
+.hero-tagline {
+    margin-bottom: 1.5rem;
+}
+
 .hero-grid {
     display: block;
 }
@@ -126,13 +130,13 @@ h1, .brand, .skills-title, .skills-column-title {
 .bio {
     color: var(--text-muted);
     max-width: 500px;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
 }
 
 .meta-list {
     display: flex;
     gap: 2rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
 }
 
 .meta-row dt {
@@ -169,43 +173,13 @@ h1, .brand, .skills-title, .skills-column-title {
     background-color: var(--accent);
 }
 
-/*.hero-photo {
-    grid-area: photo;
-    align-self: center;
-    position: relative;
-}
-
-/*untuk ngatur kotak dibelakang foto
-.photo-block {
-    position: absolute;
-    top: 1.25rem;
-    left: 1.25rem;
-    width: 100%;
-    height: 100%;
-    background-color: var(--accent);
-    border-radius: var(--radius);
-    z-index: 0;
-}*/
-
-/*untuk foto utama*/
-/*.avatar {
-    position: relative;
-    z-index: 1;
-    display: block;
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    object-fit: cover;
-    border-radius: var(--radius);
-    border: 3px solid var(--ink);
-}*/
-
 /*tambahan untuk credential-section*/
 .credentials-section {
     padding: 100px 0 40px; 
     background-color: #fce6a0;
 }
 
-/*ngatur crential list nya gimana*/
+/*ngatur crendential list nya gimana*/
 .credentials-list {
     display: flex;
     justify-content: space-between;
@@ -222,7 +196,6 @@ h1, .brand, .skills-title, .skills-column-title {
     flex: 3;
     min-width: 110px;
     padding: 15px;
-    /*border-right: 1px solid #ddd;*/
 }
 
 /*ngatur logo credentials*/
@@ -257,7 +230,7 @@ h1, .brand, .skills-title, .skills-column-title {
     text-align: right;
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* biar tombol & elemen block ikut nempel kanan */
+    align-items: flex-end; 
 }
 
 .about-title {
@@ -299,7 +272,6 @@ h1, .brand, .skills-title, .skills-column-title {
     display: block;
 }
 
-/* highlight list */
 .about-highlights {
     display: flex;
     flex-direction: column;
@@ -337,27 +309,10 @@ h1, .brand, .skills-title, .skills-column-title {
     line-height: 1.4;
 }
 
-@media (max-width: 768px) {
-    .about-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    .about-text {
-        align-items: center;
-        text-align: center;
-    }
-    .about-photo {
-        order: -1; 
-    }
-}
-
-
-
 /*tambahan untuk section skills (Individual Assignment 1)*/ 
 .skills-section { /*skill section*/
     padding: 4rem 0 5rem;
     background: linear-gradient(180deg, #F7F1DE 0%, #FFFFFF 100%);
-    /*background: linear-gradient(90deg, #F7EED3 0%, #F9F8F6 100%);*/
 }
 
 .skills-title {
@@ -476,7 +431,6 @@ h1, .brand, .skills-title, .skills-column-title {
     padding: 1.5rem;
     color: var(--text-muted);
     font-size: 0.85rem;
-    /*border-top: 1px solid var(--line);*/
 }
 
 @media (max-width: 600px) {
