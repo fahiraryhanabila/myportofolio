@@ -85,7 +85,7 @@ h1, .brand, .skills-title, .skills-column-title {
 }
 
 .hero {
-    padding: 8rem 0 6rem;
+    padding: 4rem 0 4rem;
     background-image: url('/static/img/fahiraFix.png');
     background-size: cover;
     background-position: center;
