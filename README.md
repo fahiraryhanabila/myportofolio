@@ -25,7 +25,8 @@ Konten pada halaman portofolio ini meliputi:
     source env/bin/activate # macOS/Linux
     ```
 3. Pasang seluruh pustaka (*library*) yang dibutuhkan proyek melalui berkas `requirements.txt`:
-    ```pip install-r requirements.txt
+    ```
+    pip install-r requirements.txt
     ```
 4. Terapkan migrasi basis data bawaan Django agar struktur tabel tersinkronisasi:
     ```
