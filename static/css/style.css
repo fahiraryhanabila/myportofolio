@@ -85,7 +85,7 @@ h1, .brand, .skills-title, .skills-column-title {
 }
 
 .hero {
-    padding: 4rem 0 4rem;
+    padding: 6rem 0 6rem;
     background-image: url('/static/img/fahiraFix.png');
     background-size: cover;
     background-position: center;
@@ -125,7 +125,7 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .bio {
     color: var(--text-muted);
-    max-width: 480px;
+    max-width: 500px;
     margin-bottom: 1rem;
 }
 
@@ -198,6 +198,50 @@ h1, .brand, .skills-title, .skills-column-title {
     border-radius: var(--radius);
     border: 3px solid var(--ink);
 }*/
+
+/*tambahan untuk credential-section*/
+.credentials-section {
+    padding: 100px 0 40px; 
+    background-color: #f5efe9;
+}
+
+/*ngatur crential list nya gimana*/
+.credentials-list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 32px 24px; /*vertikal - horizontal*/
+}
+
+/*ngatur per item di credential*/
+.credentials-item {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+    flex: 3;
+    min-width: 110px;
+    padding: 15px;
+    /*border-right: 1px solid #ddd;*/
+}
+
+/*ngatur logo credentials*/
+.credentials-logo img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 6px ;
+}
+
+.credential-info h3 {
+    font-size: 12px;
+    font-weight: 500;
+    margin: 1;
+    color: #0A2947;
+    text-align: center;
+}
+
+
 
 /*tambahan untuk section skills (Individual Assignment 1)*/ 
 .skills-section { /*skill section*/
