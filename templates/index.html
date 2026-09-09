@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fahira Ryhanabila - Portfolio</title>
+    <title>{{ name }} - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,9 +12,10 @@
 <body>
     <header class="site-header">
         <div class="container">
-            <a href="#About" class="brand">Fahira's Portofolio</a>
-            <nav>
-                <a href="#About">About Me</a>
+           <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
+           <nav>
+                <a href="{% url 'main:show_main' %}">Profile</a>
+                <a href="{% url 'main:show_experience' %}">Experience</a>
             </nav>
         </div>
     </header>
@@ -24,7 +25,7 @@
             <div class="container hero-grid">
                 <div class="hero-identity">
                     <p class="hero-kicker">Information System &middot; Universitas Indonesia</p>
-                    <h1>Fahira Ryhanabila</h1>
+                    <h1>{{ name }}</h1>
                 </div>
     
                 <div class="hero-details">
@@ -32,11 +33,11 @@
                     <dl class="meta-list">
                         <div class="meta-row">
                             <dt>NPM</dt>
-                            <dd>2506623660</dd>
+                            <dd>{{ npm }}</dd>
                         </div>
                         <div class="meta-row">
                             <dt>Program</dt>
-                            <dd>S1 Sistem Informasi</dd>
+                            <dd>{{ study_program }}</dd>
                         </div>
                     </dl>
                     <div class="social-links">
@@ -97,16 +98,13 @@
             <p class="hero-kicker">About Me</p>
             <h2 class="about-title">Who I Am</h2>
             <p class="about-desc">
-                I'm an Information Systems student at Universitas Indonesia who enjoys exploring the intersection of technology, business, and user experience.
-            </p>
-            <p class="about-desc">
-                I'm always excited to learn, collaborate, and create solutions that make a real impact — whether through product, research, or meaningful conversations.
+              {{ bio }}
             </p>
             <a href="https://id.linkedin.com/in/fahira-ryhanabila-1056a1373" target="_blank" rel="noopener noreferrer" class="btn-lets-connect">Lets Connect!</a>
         </div>
 
         <div class="about-photo">
-            <img src="/static/img/foto2.jpeg" alt="Fahira Ryhanabila">
+            <img src="/static/img/foto2.jpeg" alt="Photo of {{ name }}">
         </div>
 
         <div class="about-highlights">
@@ -218,7 +216,7 @@
     </main>
     <footer class="site-footer">
         <div class="container">
-            <p>&copy; 2026 Fahira. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
+            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
         </div>
     </footer>
    <script src="https://unpkg.com/lucide@latest"></script>
