@@ -531,7 +531,7 @@ h1, .brand, .skills-title, .skills-column-title {
 }
 
 .section-kicker {
-    color: #FFFDEB;
+    color:var(--text-muted);
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.08em;
