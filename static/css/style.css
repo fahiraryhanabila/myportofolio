@@ -527,11 +527,11 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .experience-section {
     padding: 4rem 0;
-    border-top: 1px solid var(--line);
+    border-top: 1px solid var(--paper);
 }
 
 .section-kicker {
-    color: var(--accent-dark);
+    color: #FFFDEB;
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -551,13 +551,13 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .experience-card {
     padding: 1.25rem;
-    background-color: #fff;
+    background-color: var(--accent-dark);
     border: 1px solid var(--line);
     border-radius: var(--radius);
 }
 
 .experience-category {
-    color: var(--accent-dark);
+    color: var(--paper);
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -566,15 +566,17 @@ h1, .brand, .skills-title, .skills-column-title {
 .experience-card h2 {
     margin: 0.5rem 0;
     font-size: 1.25rem;
+    color: var(--paper)
 }
 
 .experience-description,
 .empty-state {
-    color: var(--text-muted);
+    color: var(--paper);
 }
 
 .experience-status {
     margin-top: 1rem;
     font-size: 0.85rem;
     font-weight: 600;
+    color: antiquewhite;
 }
