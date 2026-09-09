@@ -14,7 +14,7 @@
     --radius: 4px;
 }
 
-/*Pengaturan gambar responsive*/
+/*setting gambar agar responsive*/
 img {
     max-width: 100%;
     height: auto;
@@ -50,7 +50,7 @@ body {
     color: var(--ink);
     background-color:var(--paper);
     line-height: 1.6;
-    overflow-x: hidden; /* jaga-jaga kalau ada elemen yang masih kelebihan*/
+    overflow-x: hidden; /* jaga-jaga kalau ada elemen yang masih meleber */
 }
 
 h1, .brand, .skills-title, .skills-column-title {
@@ -107,7 +107,6 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .hero-grid {
     display: block;
-    max-width: 560px;
 }
 
 .hero-identity {
@@ -323,7 +322,7 @@ h1, .brand, .skills-title, .skills-column-title {
 }
 
 /*tambahan untuk section skills (Individual Assignment 1)*/
-.skills-section { 
+.skills-section { /*skill section*/
     padding: 4rem 0 5rem;
     background: linear-gradient(180deg, #F7F1DE 0%, #FFFFFF 100%);
 }
@@ -446,7 +445,7 @@ h1, .brand, .skills-title, .skills-column-title {
     font-size: 0.85rem;
 }
 
-/*RESPONSIVE — TABLET*/
+/*RESPONSIVE tablet*/ 
 @media (max-width: 768px) {
     .hero-grid {
         grid-template-columns: 1fr;
@@ -488,7 +487,7 @@ h1, .brand, .skills-title, .skills-column-title {
     }
 }
 
-/* Pengaturan RESPONSIVE — MOBILE (<=600px) */
+/*RESPONSIVE mobile*/
 @media (max-width: 600px) {
     .hero {
         padding: 4rem 0;
@@ -524,4 +523,58 @@ h1, .brand, .skills-title, .skills-column-title {
         justify-content: center;
         text-align: center;
     }
+}
+
+.experience-section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--line);
+}
+
+.section-kicker {
+    color: var(--accent-dark);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.experience-section h1 {
+    margin: 0.4rem 0 1.5rem;
+    font-size: 2rem;
+}
+
+.experience-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.experience-card {
+    padding: 1.25rem;
+    background-color: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.experience-category {
+    color: var(--accent-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.experience-card h2 {
+    margin: 0.5rem 0;
+    font-size: 1.25rem;
+}
+
+.experience-description,
+.empty-state {
+    color: var(--text-muted);
+}
+
+.experience-status {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
 }
