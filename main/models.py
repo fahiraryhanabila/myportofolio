@@ -13,7 +13,7 @@ class Experience(models.Model):
         ('full-time', 'Full-Time'),
         ('freelance', 'Freelance'),
     ]
-    
+        
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=255)
     description = models.TextField()
@@ -27,3 +27,22 @@ class Experience(models.Model):
     @property
     def is_ongoing(self):
         return self.ended_at is None
+    
+class Education(models.Model):
+    EDUCATIONAL_LEVEL = [
+        ("Elementary School", "elementary school"),
+        ("Junior High School", "junior high school"),
+        ("Senior High School", "senior high school"),
+        ("Bachelor's Degree", "bachelor's degree"),
+    ]
+    title = models.CharField(max_length=255, default="")
+    is_ongoing = models.BooleanField(default=False)
+    start_year = models.IntegerField()
+    description = models.TextField()
+    end_year = models.IntegerField(null=True, blank=True) 
+    category_edu = models.CharField(max_length=20, choices=EDUCATIONAL_LEVEL)
+    skills = models.CharField(max_length=255, blank=True, default="")
+    
+    @property
+    def skill_list(self):
+        return [s.strip() for s in self.skills.split(",") if s.strip()]
