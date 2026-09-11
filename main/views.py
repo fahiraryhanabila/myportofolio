@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from main.models import Experience
+from main.models import Education
 
 
 def show_main(request):
@@ -12,6 +13,7 @@ def show_main(request):
             "I'm an Information Systems student at Universitas Indonesia who enjoys exploring the intersection of technology, business, and user experience."
             "I'm always excited to learn, collaborate, and create solutions that make a real impact — whether through product, research, or meaningful conversations."
         ),
+        "education_list": Education.objects.all()
     }
     return render(request, "index.html", context)
 
