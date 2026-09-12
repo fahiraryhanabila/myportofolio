@@ -42,6 +42,10 @@ class Education(models.Model):
     end_year = models.IntegerField(null=True, blank=True) 
     category_edu = models.CharField(max_length=20, choices=EDUCATIONAL_LEVEL)
     skills = models.CharField(max_length=255, blank=True, default="")
+    thumbnail = models.URLField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
     
     @property
     def skill_list(self):
