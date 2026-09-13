@@ -47,3 +47,6 @@ class Education(models.Model):
     @property
     def skill_list(self):
         return [s.strip() for s in self.skills.split(",") if s.strip()]
+    
+    def __str__(self):
+        return self.title

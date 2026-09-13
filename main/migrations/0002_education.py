@@ -14,14 +14,7 @@ class Migration(migrations.Migration):
             name='Education',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(default='', max_length=255)),
-                ('is_ongoing', models.BooleanField(default=False)),
-                ('start_year', models.IntegerField()),
-                ('description', models.TextField()),
-                ('end_year', models.IntegerField(blank=True, null=True)),
                 ('category_edu', models.CharField(choices=[('Elementary School', 'elementary school'), ('Junior High School', 'junior high school'), ('Senior High School', 'senior high school'), ("Bachelor's Degree", "bachelor's degree")], max_length=20)),
-                ('skills', models.CharField(blank=True, default='', max_length=255)),
-                ('thumbnail', models.URLField(blank=True, null=True)),
             ],
         ),
     ]
