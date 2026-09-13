@@ -28,7 +28,7 @@ img {
     margin-bottom: 2rem;
 }
 
-.eduction-section {
+.education-section {
     padding: 4rem 0 5rem;
 }
 
@@ -96,40 +96,67 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .hero {
     padding: 6rem 0 6rem;
-    background-image: url('/static/img/fahiraFix.png');
+    background-image: url('/static/img/hero-fahira.PNG');
     background-size: cover;
     background-position: center;
 }
 
-.hero-tagline {
-    margin-bottom: 1.5rem;
-}
-
-.hero-grid {
-    display: block;
-}
-
-.hero-identity {
-    grid-area: identity;
-}
-
-.hero-identity h1 {
-    font-size: clamp(3rem, 7vw, 5rem);
-    line-height: 0.95;
-    margin-bottom: 1.8rem;
-}
-
-.hero-details {
-    grid-area: details;
+.hero-content {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    grid-template-areas:
+        "kicker  photo"
+        "name    photo"
+        "tagline photo"
+        "meta    photo"
+        "social  photo";
+    column-gap: 3rem;
+    align-items: start;
+    text-align: left;
 }
 
 .hero-kicker {
+    grid-area: kicker;
     font-size: 0.85rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--accent-dark);
     font-weight: 700;
     margin-bottom: 0.75rem;
+}
+
+.hero-content h1 {
+    grid-area: name;
+    font-size: clamp(3rem, 7vw, 5rem);
+    line-height: 0.95;
+    margin-bottom: 1.2rem;
+}
+
+.hero-tagline {
+    grid-area: tagline;
+    font-family: "Poppins", -apple-system, sans-serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 600;
+    color: var(--accent-dark);
+    margin-bottom: 2rem;
+    line-height: 1.4;
+}
+
+.hero-photo {
+    grid-area: photo;
+    align-self: center;
+    justify-self: end;
+}
+
+.hero-photo img {
+    width: 100%;
+    max-width: clamp(200px, 22vw, 320px);
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border: 8px solid var(--paper);
+    border-radius: 12px;
+    box-shadow: 0 24px 45px rgba(65, 45, 21, 0.35);
+    transform: rotate(-3deg);
 }
 
 .bio {
@@ -220,23 +247,26 @@ h1, .brand, .skills-title, .skills-column-title {
     text-align: center;
 }
 
+/* ============================================
+   ABOUT — 2 kolom: foto kiri, deskripsi kanan
+   (kolom skills sudah dihapus)
+   ============================================ */
 .about-section {
     padding: 5rem 0;
 }
 
 .about-grid {
     display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 2.5rem;
+    grid-template-columns: minmax(120px, 220px) 1fr;
+    gap: 3rem;
     align-items: center;
 }
 
-/* teks di kiri, tapi rata kanan */
 .about-text {
-    text-align: right;
+    text-align: left;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 .about-title {
@@ -248,7 +278,6 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .about-desc {
     color: var(--text-muted);
-    max-width: 420px;
     margin-bottom: 1rem;
 }
 
@@ -269,56 +298,18 @@ h1, .brand, .skills-title, .skills-column-title {
     background-color: var(--accent);
 }
 
-/* foto di kanan — dibuat fully responsive */
+/* foto di kiri — dibuat fully responsive */
 .about-photo {
     display: flex;
     justify-content: center;
 }
 
 .about-photo img {
-    width: 220px;
-    max-width: 100%;
+    width: 100%;
     height: auto;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 16px;
-}
-
-.about-highlights {
-    display: flex;
-    flex-direction: column;
-    gap: 1.3rem;
-}
-
-.highlight-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.8rem;
-}
-
-.highlight-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: #f5efe9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: var(--ink);
-}
-
-.highlight-info h3 {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--ink);
-    margin-bottom: 0.2rem;
-}
-
-.highlight-info p {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    line-height: 1.4;
 }
 
 /*tambahan untuk section skills (Individual Assignment 1)*/
@@ -447,42 +438,30 @@ h1, .brand, .skills-title, .skills-column-title {
 
 /*RESPONSIVE tablet*/ 
 @media (max-width: 768px) {
-    .hero-grid {
+    /* di HP/tablet, foto pindah ke bawah tagline, sisanya tetap 1 kolom */
+    .hero-content {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        grid-template-areas:
+            "kicker"
+            "name"
+            "tagline"
+            "photo"
+            "meta"
+            "social";
+        row-gap: 0.25rem;
+    }
+
+    .hero-photo {
+        justify-self: start;
+        margin: 1rem 0 1.5rem;
+    }
+
+    .hero-photo img {
+        max-width: clamp(180px, 55vw, 280px);
     }
 
     .about-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-        gap: 1.75rem;
-    }
-
-    .about-text {
-        align-items: center;
-        text-align: center;
-    }
-
-    .about-desc {
-        max-width: 100%;
-    }
-
-    .about-photo img {
-        width: 200px;
-    }
-
-    .about-highlights {
-        align-items: center;
-        max-width: 320px;
-        margin: 0 auto;
-    }
-
-    .highlight-item {
-        width: 100%;
-    }
-
-    .skills-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(90px, 150px) 1fr;
         gap: 1.5rem;
     }
 }
@@ -493,18 +472,6 @@ h1, .brand, .skills-title, .skills-column-title {
         padding: 4rem 0;
     }
 
-    .hero-grid {
-        max-width: 100%;
-    }
-
-    .social-links {
-        justify-content: center;
-    }
-
-    .meta-list {
-        justify-content: center;
-    }
-
     .credentials-list {
         justify-content: center;
         text-align: center;
@@ -513,10 +480,6 @@ h1, .brand, .skills-title, .skills-column-title {
     .credentials-item {
         flex: 1 1 45%;
         justify-content: center;
-    }
-
-    .about-photo img {
-        width: 160px;
     }
 
     .site-header .container {

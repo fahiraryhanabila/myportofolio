@@ -44,9 +44,9 @@ class Education(models.Model):
     skills = models.CharField(max_length=255, blank=True, default="")
     thumbnail = models.URLField(blank=True, null=True)
     
-    def __str__(self):
-        return self.title
-    
     @property
     def skill_list(self):
         return [s.strip() for s in self.skills.split(",") if s.strip()]
+    
+    def __str__(self):
+        return self.title
