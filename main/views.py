@@ -12,7 +12,7 @@ def show_main(request):
         "study_program": "S1 Sistem Informasi",
         "bio": (
             "I'm an Information Systems student at Universitas Indonesia who enjoys exploring the intersection of technology, business, and user experience."
-            "I'm always excited to learn, collaborate, and create solutions that make a real impact — whether through product, research, or meaningful conversations."
+            " I'm always excited to learn, collaborate, and create solutions that make a real impact — whether through product, research, or meaningful conversations."
         ),
         "education_list": Education.objects.all()
     }
@@ -69,4 +69,24 @@ def seeder_data(request):
             "ended_at": None,
         }
     )
+    
+    Experience.objects.get_or_create(
+            title="Facilitator Baitul Arqam Madya 2026 PD IPM Yogyakarta",
+            defaults={
+                "description": "Volunteered as a facilitator, guiding participants throughout the Baitul Arqam Madya program and supporting their learning and engagement.",
+                "category": "volunteer",
+                "ended_at": "2026-01-02",
+            }
+        )
+    
+    Experience.objects.get_or_create(
+                title="Staff at SBF Adkesma 2025",
+                defaults={
+                    "description": "Supported student advocacy and welfare initiatives by assisting in identifying student concerns, developing solutions, and organizing related programs.",
+                    "category": "internship",
+                    "ended_at": "2026-01-02",
+                }
+            )
+    
+    
     return HttpResponse("Seeding data berhasil!")
