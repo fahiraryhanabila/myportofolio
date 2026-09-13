@@ -580,3 +580,224 @@ h1, .brand, .skills-title, .skills-column-title {
     font-weight: 600;
     color: antiquewhite;
 }
+
+.education-section{
+    padding: 4rem 0 5rem;
+}
+
+.education-section .section-description {
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+}
+
+/*bikin garis vertikal di tengah + container timeline*/
+.education-timeline{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem 0;
+}
+
+/*Bikin garis tengah timeline*/
+.education-timeline::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 28px;
+    width: 2px;
+    background-color: var(--line);
+    /*transform: translateX(-50%)*/
+}
+
+/*Buat nentuin peletakan card education*/
+.timeline-item {
+    position: relative;
+    padding-left: 4.5rem;
+}
+
+/*Lingkaran nomor*/
+.timeline-marker{
+    position: absolute;
+    top: 0;
+    left: 28px;
+    transform: translate(-50%);
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-color: var(--ink);
+    color: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Poppins", -apple-system, sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    z-index: 2;
+    box-shadow: 0 0 0 4px var(--paper);
+}
+
+/*Card tiap jenjang*/
+.timeline-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    background-color: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 1.25rem;
+    box-shadow: 0 3px 10px rgba(65, 45, 21, 0.08);
+    cursor: default;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/*efek timbut saat kursor di atas card*/
+.timeline-card:hover {
+    transform: translate(-6px);
+    box-shadow: 0 14px 26px rgba(65, 45, 21, 0.18);
+}
+
+/*item ganjil di sebelah kiri garis
+.timeline-item:nth-child(odd) .timeline-card {
+    grid-column: 1;
+    justify-self: end;
+    flex-direction: row;
+}
+
+item genap di sebelah kanan garis
+.timeline-item:nth-child(even) .timeline-card {
+    grid-column: 2;
+    justify-self: start;
+    flex-direction: row-reverse;
+}*/
+
+/*untuk set ukuran photo ga berubah*/
+.timeline-photo {
+    flex-shrink: 0;
+}
+
+/*untuk ngatur ukuran photo*/
+.timeline-photo img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 10px rgba(65, 45, 21, 0.18);
+    
+}
+
+.timeline-content {
+    min-width: 0;
+    text-align: left;
+}
+
+.education-category {
+    display: inline;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.06rem;
+    text-transform: uppercase;
+    color: var(--accent-dark);
+    margin-bottom: 0.3rem;
+}
+
+.timeline-content h2 {
+    font-family: "Poppins", -apple-system, sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 0.35rem;
+}
+
+.education-status {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+}
+
+.education-description {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.education-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: flex-start;
+}
+
+.skill-badge {
+    background-color: rgba(109, 41, 50, 0.08);
+    color: var(--ink);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+}
+
+@media (max-width: 600px) {
+    .education-timeline::before {
+        left: 20px;
+    }
+ 
+    .timeline-item {
+        padding-left: 3.25rem;
+    }
+ 
+    .timeline-marker {
+        width: 38px;
+        height: 38px;
+        left: 20px;
+        font-size: 0.75rem;
+    }
+
+    .timeline-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .timeline-photo img {
+        width: 90px;
+        height: 90px;
+    }
+}
+ 
+/* ==========================================
+   FIX NAVBAR
+   ========================================== */
+
+.site-header {
+    width: 100%;
+    background-color: var(--paper, #fdfbf7);
+    border-bottom: 1px solid var(--line, #e2e8f0);
+}
+
+.site-header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between; /* Mendorong brand ke kiri & nav ke kanan */
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.site-header nav {
+    display: flex;
+    gap: 20px; /* Jarak antar Profile, Experience, dan Education */
+    align-items: center;
+    flex-wrap: nowrap; /* Mencegah menu turun ke bawah */
+}
+
+.site-header nav a {
+    text-decoration: none;
+    color: var(--ink, #1a202c);
+    font-weight: 500;
+    white-space: nowrap; /* Mencegah teks terpotong */
+}
