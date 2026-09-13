@@ -16,35 +16,36 @@
            <nav>
                 <a href="{% url 'main:show_main' %}">Profile</a>
                 <a href="{% url 'main:show_experience' %}">Experience</a>
+                <a href="{% url 'main:show_education' %}">Education</a>
             </nav>
         </div>
     </header>
 
     <main>
-        <section class="hero" id="About">
-            <div class="container hero-grid">
-                <div class="hero-identity">
-                    <p class="hero-kicker">Information System &middot; Universitas Indonesia</p>
-                    <h1>{{ name }}</h1>
+        <section class="hero" id="about">
+            <div class="container hero-content">
+                <p class="hero-kicker">Information System &middot; Universitas Indonesia</p>
+                <h1>{{ name }}</h1>
+                <h2 class="hero-tagline">Building impactful digital products, one line of code at a time.</h2>
+
+                <div class="hero-photo">
+                    <img src="/static/img/fahira-photo.JPEG" alt="Foto {{ name }}">
                 </div>
-    
-                <div class="hero-details">
-                    <h2 class="hero-kicker">Building impactful digital products, one line of code at time.</h2>
-                    <dl class="meta-list">
-                        <div class="meta-row">
-                            <dt>NPM</dt>
-                            <dd>{{ npm }}</dd>
-                        </div>
-                        <div class="meta-row">
-                            <dt>Program</dt>
-                            <dd>{{ study_program }}</dd>
-                        </div>
-                    </dl>
-                    <div class="social-links">
-                        <a href="https://github.com/fahiraryhanabila" class="social-link">GitHub</a>
-                        <a href="https://id.linkedin.com/in/fahira-ryhanabila-1056a1373" class="social-link">LinkedIn</a>
-                        <a href="mailto:fryhanabila@gmail.com" class="social-link">Email</a>
+
+                <dl class="meta-list">
+                    <div class="meta-row">
+                        <dt>NPM</dt>
+                        <dd>{{ npm }}</dd>
                     </div>
+                    <div class="meta-row">
+                        <dt>Program</dt>
+                        <dd>{{ study_program }}</dd>
+                    </div>
+                </dl>
+                <div class="social-links">
+                    <a href="https://github.com/fahiraryhanabila" class="social-link">GitHub</a>
+                    <a href="https://id.linkedin.com/in/fahira-ryhanabila-1056a1373" class="social-link">LinkedIn</a>
+                    <a href="mailto:fryhanabila@gmail.com" class="social-link">Email</a>
                 </div>
             </div>
         </section>
@@ -92,47 +93,22 @@
             </div>
         </section>
 
-        <section id="about" class="about-section">
-    <div class="container about-grid">
-        <div class="about-text">
-            <p class="hero-kicker">About Me</p>
-            <h2 class="about-title">Who I Am</h2>
-            <p class="about-desc">
-              {{ bio }}
-            </p>
-            <a href="https://id.linkedin.com/in/fahira-ryhanabila-1056a1373" target="_blank" rel="noopener noreferrer" class="btn-lets-connect">Lets Connect!</a>
-        </div>
+        <section id="who-i-am" class="about-section">
+            <div class="container about-grid">
+                <div class="about-photo">
+                    <img src="/static/img/photo-2.jpeg" alt="Photo of {{ name }}">
+                </div>
 
-        <div class="about-photo">
-            <img src="/static/img/foto2.jpeg" alt="Photo of {{ name }}">
-        </div>
-
-        <div class="about-highlights">
-            <div class="highlight-item">
-                <div class="highlight-icon"><i data-lucide="lightbulb"></i></div>
-                <div class="highlight-info">
-                    <h3>Product Management</h3>
-                    <p>Turning ideas into user-centered solutions</p>
+                <div class="about-text">
+                    <h2 class="about-title">Who I Am</h2>
+                    <p class="about-desc">
+                        {{ bio }}
+                    </p>
+                    <a href="https://id.linkedin.com/in/fahira-ryhanabila-1056a1373" target="_blank" rel="noopener noreferrer" class="btn-lets-connect">Lets Connect!</a>
                 </div>
             </div>
+        </section>
 
-            <div class="highlight-item">
-                <div class="highlight-icon"><i data-lucide="user"></i></div>
-                <div class="highlight-info">
-                    <h3>UX &amp; Research</h3>
-                    <p>Understanding people, creating better experiences</p>
-                </div>
-            </div>
-            <div class="highlight-item">
-                <div class="highlight-icon"><i data-lucide="trending-up"></i></div>
-                <div class="highlight-info">
-                    <h3>Technology &amp; Business</h3>
-                    <p>Bridging tech with real business value</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
        <section id="skills" class="skills-section">
             <div class="container">
                 <h2 class="skills-title">What i Bring</h2>
