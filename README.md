@@ -3,7 +3,7 @@ NPM     : 2506623660
 Class   : PBP E
 
 ## Tentang Proyek
-Sebuah website portofolio personal yang interaktif dan responsif, guna memenuhi tugas individu (*Individual Assignment*) mata kuliah Pemograman Berbasis Platform (PBP).
+Sebuah website portofolio personal yang interaktif dan responsif, guna memenuhi tugas individu (*Individual Assignment*) mata kuliah Pemrograman Berbasis Platform (PBP).
 
 Konten pada halaman portofolio ini meliputi:
 - **Hero Section**: Menampilkan identitas utama (nama, program studi, NPM), tagline personal, serta tautan menuju GitHub, LinkedIn, dan Email, dengan latar belakang visual bertema kampus.
@@ -26,7 +26,7 @@ Konten pada halaman portofolio ini meliputi:
     ```
 3. Pasang seluruh pustaka (*library*) yang dibutuhkan proyek melalui berkas `requirements.txt`:
     ```
-    pip install-r requirements.txt
+    pip install -r requirements.txt
     ```
 4. Terapkan migrasi basis data bawaan Django agar struktur tabel tersinkronisasi:
     ```
@@ -37,6 +37,34 @@ Konten pada halaman portofolio ini meliputi:
     python manage.py runserver
     ```
 6. Akses proyek melalui browser dengan membuka alamat `http://localhost:8000`
+
+## Weekly Setup Instructions
+Untuk memastikan proyek tetap berjalan dengan baik, beberapa langkah setup perlu dilakukan pada setiap awal minggu atau setelah memperoleh perubahan terbaru dari repository. 
+1. Ambil perubahan terbaru dari repository menggunakan perintah:
+    ```bash
+    git pull
+    ```
+2. Pastikan virtual environment proyek telah aktif sebelum menjalankan proyek:
+    ```
+    env\Scripts\activate
+    ```
+3. Jika terdapat perubahan atau penambahan dependencies pada proyek, lakukan instalasi melalui:
+    ```
+    pip install -r requirements.txt
+    ```
+4. Jika terdapat perubahan pada model atau migration, terapkan perubahan tersebut ke database:
+    ```
+    python manage.py migrate
+    ```
+5. Sebelum menjalankan aplikasi, pastikan seluruh fitur yang telah dikembangkan tetap berjalan dengan baik melalui:
+    ```
+    python manage.py test
+    ```
+6. Setelah seluruh test berhasil, jalankan proyek secara lokal:
+    ```
+    python manage.py runserver
+    ```
+7. Periksa halaman dan fitur yang sedang dikembangkan untuk memastikan tidak terdapat error setelah perubahan diterapkan. Setelah seluruh perubahan dipastikan berjalan dengan baik, perubahan dapat disimpan melalui commit dan dikirimkan ke repository.
 
 ## Assets & Credits
 - Ikon menggunakan **[Lucide Icons](https://lucide.dev/)**, dimuat melalui CDN.
@@ -52,9 +80,9 @@ Namun, dalam pengerjaan Tugas 1 ini, saya belum sepenuhnya konsisten menerapkan 
 Tantangan lain adalah menentukan elemen mana yang prioritas ukurannya harus fleksibel. Untuk judul-judul besar (seperti nama saya di Hero atau judul section), saya menggunakan fungsi `clamp()` pada `font-size` agar ukuran teks otomatis menyesuaikan lebar layar.
 Evaluasi yang saya lakukan biasanya dengan langsung membuka *DevTools* dan mengecek tampilan di berbagai lebar layar, lalu menentukan breakpoint.
 
-3. Website yang saya buat saat ini adalah *static web* murni, sehingga ada beberapa batasan yang saya rasakan saat mencoba menyajikan informasi secara optimal. Di awal saya berencana ingin menambahkan section *Experiences*. Namun, saya belum mengetahui cara untuk menyimpan dan menampilkan data secara dinamis menggunakan JavaSCript. Selain itu, interaktivitas yang sudah ada seperti *toggle* pada *skill-card* masih lumayan biasa.
-Adapun Fungnsionalitas dinamis yang ingin saya tambahkan pada iterasi selanjutnya adalah:
-    -Navigasi aktif dengan higlight modern
+3. Website yang saya buat saat ini adalah *static web* murni, sehingga ada beberapa batasan yang saya rasakan saat mencoba menyajikan informasi secara optimal. Di awal saya berencana ingin menambahkan section *Experiences*. Namun, saya belum mengetahui cara untuk menyimpan dan menampilkan data secara dinamis menggunakan JavaScript. Selain itu, interaktivitas yang sudah ada seperti *toggle* pada *skill-card* masih lumayan biasa.
+Adapun Fungsionalitas dinamis yang ingin saya tambahkan pada iterasi selanjutnya adalah:
+    -Navigasi aktif dengan highlight modern
     indikator visual (*modern-bubble*) yang menunjukkan section mana yang sedang aktif dilihat pengguna, menggunakan JavaScript untuk mendeteksi posisi *scroll* dan memperbarui *state* navigasi secara *real-time*
    -Pengelolaan data secara terpisah dari markup
     Untuk menyimpan data pengalaman organisasi dalam bentuk array/objek JavaScript (atau nantinya JSON), sehingga menambah pengalaman baru cukup dengan menambah data, tanpa perlu menulis ulang blok HTML.
@@ -89,3 +117,73 @@ Berikut 3 contoh interaksi saya bersama AI selama proses pengerjaan:
 * Tujuan: Memvalidasi alur pemikiran saya saat ingin merombak tampilan foto *hero* dari bentuk frame kotak menjadi foto yang menyatu dengan latar belakang.
 * Respon AI: Memvalidasi logika saya dan memberikan contoh penulisan CSS `background-image` beserta penjelasan properti *positioning*-nya.
 * Tindakan Saya: Setelah memahami penjelasan AI, saya memilih opsi yang lebih efisien yaitu menyatukan foto dan background langsung saat ekspor dari Figma, sehingga saya cukup memanggil satu gambar utuh di CSS tanpa perlu memposisikan gambar secara terpisah.
+
+### Tugas 2
+1. Alur yang terjadi ketika pengguna membuka halaman portofolio baru dimulai dengan browser mengirimkan HTTP request ke alamat website. Request tersebut kemudian diterima oleh urls.py proyek yang bertugas menentukan aplikasi yang menangani URL tersebut. Selanjutnya, request diteruskan ke urls.py aplikasi yang memetakan URL ke fungsi view yang sesuai. Pada project ini, URL dapat diarahkan ke show_main, show_experience, dan show_education.
+Selanjutnya, view akan memproses request dan mengambil data yang diperlukan dari model. Model disini bertugas merepresentasikan struktur data dalam database, seperti model Education dan Experience, dimana masing-masing model menyimpan informasi yang diperlukan. Data yang telah diperoleh oleh view kemudian dikirimkan ke template HTML. Template menggunakan data tersebut untuk membentuk halaman portofolio. Setelah template selesai dirender menjadi HTML, response dikirim kembali ke browser sehingga pengguna dapat melihat halaman portofolio beserta data yang berasal dari database.
+
+2. Hal ini berkaitan dengan konsep **MVT (Model, View, Template)** pada Django, dimana tiap komponen pada konsep ini memiliki tanggung jawab yang berbeda, antara lain:
+    a. Model bertugas mengelola dan menyimpan data
+    b. View bertugas memproses request dan mengambil data dari model
+    c. Template bertugas menampilkan data dalam bentuk halaman HTML
+Oleh karena itu, sebaiknya data untuk section baru disimpan pada model dan tidak ditulis langsung di dalam template agar terdapat pemisahan antara data dan tampilan. 
+Dengan adanya pemisahan ini pula, aplikasi akan lebih mudah dipelihara dan dikembangkan sehingga nantinya jika terdapat perubahan atau penambahan data, developer cukup mengubah pada model atau database tanpa harus mengubah struktur HTML pada template. Selain itu, template dapat digunakan kembali untuk menampilkan data yang berbeda, sehingga mengurangi penulisan data secara berulang dan membuat kode lebih terstruktur.
+
+3. Fungsi dari makemigrations dan migrate pada Django cukup berbeda. **makemigrations** digunakan untuk membuat file migration berdasarkan perubahan yang dilakukan pada model di models.py . Sedangkan, **migrate** digunakan untuk menerapkan perubahan yang terdapat dalam file migration tersebut ke database. Sebagai contoh, jika pada model Education ditambahkan field baru seperti **start_year**, maka setelah mengubah models.py kita perlu menjalankan **python manage.py makemigrations** untuk membuat migration yang mencatat penambahan field tersebut, kemudian menjalankan **python manage.py migrate** agar perubahan tersebut benar-benar diterapkan pada struktur database.
+
+### Testing
+Unit test ditambahkan untuk memastikan fitur utama pada halaman proyek ini berjalan dengan baik. Pengujian mencakup akses URL dan penggunaan template yang sesuai, penampilan data dari model ketika data tersedia, serta penampilan pesan kondisi kosong ketika belum terdapat data.
+
+* Pengujian dilakukan menggunakan perintah:
+
+    ```bash
+    python manage.py test
+    ```
+* Hasil pengujian:
+    ```
+    Ran 10 tests
+
+    OK
+    ```
+* Aplikasi juga diuji dengan menjalankan development server menggunakan:
+    ```
+    python manage.py runserver
+    ```
+    Aplikasi dapat dijalankan secara lokal tanpa error dan seluruh halaman dapat diakses sesuai dengan rute yang telah ditentukan.
+
+### **AI Disclosure - Tugas 2**
+Proyek ini dikembangkan dengan bantuan asisten berbasis Kecerdasan Buatan (AI) untuk membantu proses perancangan, *refactoring*, dan penyelesaian masalah teknis secara efisien dan etis.
+
+### 1. Alat AI yang Digunakan
+* **Google Gemini** (Model Bahasa / AI Assistant)
+
+### 2. Ruang Lingkup Bantuan AI
+* **Alur Kerja & Arsitektur Django:** Membantu menentukan urutan pengembangan fitur baru (alur *Model-View-Template* dan penataan rute URL).
+* **Diskusi Perancangan Model:** Membahas opsi *Model Inheritance* vs pembuatan model mandiri pada `models.py`.
+* **Perancangan Komponen UI/UX:** Memberikan ide awal struktur kelas CSS dan logika perulangan Django (`forloop.counter`) untuk komponen *Timeline*.
+* **Konsultasi Konsep Web Development:** Menjelaskan konsep routing Django, strategi unit responsif CSS (`width`/`height`/`max-width`), serta tata cara pengelolaan berkas media/aset.
+
+### 3. Strategi *Prompting*
+* **Iterative & Conversational Prompting:** Mengajukan pertanyaan secara bertahap seiring berkembangnya logika kode dan kebutuhan fitur.
+* **Scenario-Based Questioning:** Menanyakan kendala teknis spesifik (misal: penataan URL, struktur pewarisan model, dan tata letak responsif CSS) untuk mendapatkan solusi.
+
+### 4. Log Perintah & Hasil Interaksi
+
+| No | Perintah/Pertanyaan Utama | Ringkasan Bantuan AI | Keputusan / Tindakan Saya |
+| :---: | :--- | :--- | :--- |
+| **1** | Mengonfirmasi langkah lanjutan setelah membuat `views.py` dan `models.py`. | Mengonfirmasi alur dan mengingatkan tahapan penting (*migrate*, `urls.py`, dan *template* HTML). | Melakukan penyusunan rute URL terlebih dahulu. |
+| **2** | Menanyakan urutan pengerjaan terbaik antara routing (`urls.py`) dan pembuatan *template* HTML. | Menyusun alur kerja logis: `models.py` → `views.py` → `urls.py` → *template* HTML. | Mengikuti rekomendasi alur kerja dengan mengonfigurasi `urls.py` sebelum membuat file `.html`. |
+| **3** | Menanyakan fungsi pasti dari perintah `path()` di Django. | Menjelaskan peran `path()` sebagai pemeta rute URL ke fungsi *view* dan struktur parameternya. | Memahami konsep pemetaan URL dan menerapkan penamaan rute (`name="..."`) secara konsisten. |
+| **4** | Menanyakan cara menerapkan *inheritance* pada model agar tidak terjadi redundansi data. | Menjelaskan opsi *Model Inheritance* (seperti *Abstract Base Class*) untuk berbagi bidang (*field*) antar-kelas. | Mempertimbangkan saran AI, namun memutuskan tidak menggunakan *base class*** dan memilih membuat model `Education` secara mandiri agar struktur tiap model tetap eksplisit. |
+| **5** | Menanyakan urgensi penambahan tautan navigasi antar-halaman (*experience* ke *education*). | Memberikan praktik terbaik penggunaan *template tag* dinamis `{% url 'show_experience' %}`. | Menambahkan komponen navigasi menggunakan tag `{% url %}` pada berkas *template*. |
+| **6** | Menanyakan keharusan pendaftaran model di `admin.py` untuk pengisian berkas gambar. | Menjelaskan bahwa pendaftaran di `admin.py` bersifat opsional dan memberikan alternatif lain (misal: Django Shell). | Mengisi data awal/dummy melalui Python Shell dan Project Web Terminal pada Pacil Web Server (PWS)|
+| **7** | Menanyakan sintaks loop penomoran otomatis di *template* Django. | Memberikan contoh penggunaan variabel bawaan Django seperti `forloop.counter` dan `forloop.counter0`. | Menggunakan `forloop.counter` di dalam tag perulangan HTML untuk menampilkan nomor urut pada *marker timeline*. |
+| **8** | Meminta arahan struktur kelas CSS untuk membuat komponen *timeline*. | Menyediakan opsi struktur kelas CSS *Vertical Timeline* dan ide layout zigzag. | Menerapkan struktur *Vertical Timeline* searah dengan posisi garis di sebelah kiri (`education-timeline`) serta kartu di sisi kanan. |
+| **9** | Menanyakan pilihan unit yang tepat (`%` vs `px`) untuk pengaturan `width` dan `height`. | Memberikan panduan penggunaan unit `%` untuk responsivitas lebar dan `auto`/`px` untuk tinggi elemen. | Mengatur ukuran foto dengan `px` pasti (`110px x 110px`) dan menggunakan `rem`/`px` untuk *gap* dan *padding*. |
+| **10** | Mengonfirmasi cara kerja fungsi `max-width` pada CSS. | Menjelaskan fungsi `max-width` dalam membatasi lebar maksimal elemen di layar berukuran besar. | Menerapkan `max-width: 960px` pada `.container` dan `max-width: 100%` pada elemen gambar agar responsif. |
+
+### 5. Evaluasi Kritis terhadap Penggunaan AI
+
+AI digunakan sebagai alat bantu dalam proses pengembangan, bukan sebagai pengganti proses pemrograman yang saya lakukan. Saya tidak langsung menerapkan seluruh solusi yang diberikan AI, tetapi terlebih dahulu memahami alasan dan logika di balik setiap saran, kemudian menyesuaikannya dengan struktur proyek dan kebutuhan tugas.
+
+Sebagai contoh, ketika AI memberikan saran mengenai struktur komponen dan implementasi fitur, saya membandingkan solusi tersebut dengan kode yang sudah saya miliki sebelum menentukan apakah solusi tersebut sesuai untuk digunakan. Saya juga menggunakan pertanyaan lanjutan (*follow-up prompting*) ketika terdapat konsep yang belum saya pahami, sehingga proses penggunaan AI tidak hanya berfokus pada menghasilkan kode, tetapi juga membantu memahami konsep yang sedang dipelajari.

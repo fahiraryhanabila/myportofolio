@@ -33,7 +33,7 @@ class Education(models.Model):
         ("Elementary School", "elementary school"),
         ("Junior High School", "junior high school"),
         ("Senior High School", "senior high school"),
-        ("Bachelor's Degree", "bachelor's degree"),
+        ("Bachelor's Degree", "Bachelor's Degree"),
     ]
     title = models.CharField(max_length=255, default="")
     is_ongoing = models.BooleanField(default=False)
