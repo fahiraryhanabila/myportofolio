@@ -96,7 +96,7 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .hero {
     padding: 6rem 0 6rem;
-    background-image: url('/static/img/hero-fahira.PNG');
+    background-image: url('/static/img/hero-fahira.png');
     background-size: cover;
     background-position: center;
 }
