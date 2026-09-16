@@ -30,9 +30,9 @@ class Experience(models.Model):
     
 class Education(models.Model):
     EDUCATIONAL_LEVEL = [
-        ("Elementary School", "elementary school"),
-        ("Junior High School", "junior high school"),
-        ("Senior High School", "senior high school"),
+        ("Elementary School", "Elementary School"),
+        ("Junior High School", "Junior High School"),
+        ("Senior High School", "Senior High School"),
         ("Bachelor's Degree", "Bachelor's Degree"),
     ]
     title = models.CharField(max_length=255, default="")
