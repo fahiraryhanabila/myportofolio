@@ -1,35 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
+{% block meta %}
     <title>Education - {{ name }}</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
-</head>
-<body>
-    <header class="site-header">
-        <div class="container">
-            <a href="{% url 'main:show_main' %}" class="brand">{{ name }}</a>
-            <nav>
-                <a href="{% url 'main:show_main' %}">Profile</a>
-                <a href="{% url 'main:show_experience' %}">Experience</a>
-                <a href="{% url 'main:show_education' %}">Education</a>
-            </nav>
-        </div>
-    </header>
-
+{% endblock meta %}
+{% block content %}
     <main>
         <section class="education-section" id="education">
             <div class="container">
                 <p class="section-kicker">Here's my education journey</p>
-                <h1 class="section-title">Education</h1>
+                <div class="education-header">
+                    <h1 class="section-title">Education</h1>
+                    <a href="{% url 'main:create_education' %}"
+                       class="button education-add-button">
+                        <span aria-hidden="true">+</span>
+                        Tambah Pendidikan
+                    </a>
+                </div>
                 <p class="section-description">
                     From where I started to where I am today. Each phase of my education has shaped my curiosity, values, and the person I am becoming.
                 </p>
+
+                <form method="get"
+                      action="{% url 'main:show_education' %}"
+                      class="education-search">
+                    <input type="search"
+                           name="title"
+                           value="{{ title_query }}"
+                           placeholder="Cari berdasarkan nama pendidikan"
+                           class="education-search__input"
+                           aria-label="Cari berdasarkan nama pendidikan">
+                    <button type="submit" class="button">Cari</button>
+                </form>
 
                 <div class="education-timeline">
                     {% for education in education_list %}
@@ -66,34 +66,27 @@
                                             {% endfor %}
                                         </div>
                                     {% endif %}
+
+                                    {% include "components/education_delete_modal.html" with education=education %}
                                 </div>
                             </article>
                         </div>
                     {% empty %}
-                        <p class="empty-state">
-                            Belum ada riwayat pendidikan yang ditambahkan.
-                        </p>
+                        {% if title_query %}
+                            <p class="empty-state">Tidak ada riwayat pendidikan dengan nama tersebut.</p>
+                        {% else %}
+                            <p class="empty-state">Belum ada riwayat pendidikan yang ditambahkan.</p>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>
         </section>
     </main>
+{% endblock content %}
 
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2026 {{ name }}. Fakultas Ilmu Komputer, Universitas Indonesia.</p>
-        </div>
-    </footer>
-
+{% block scripts %}
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         lucide.createIcons();
-
-        document.querySelectorAll('.skill-card').forEach(function (card) {
-            card.addEventListener('click', function () {
-                card.classList.toggle('is-raised');
-            });
-        });
     </script>
-</body>
-</html>
+{% endblock scripts %}
