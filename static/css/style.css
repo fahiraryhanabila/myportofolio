@@ -636,20 +636,6 @@ h1, .brand, .skills-title, .skills-column-title {
     box-shadow: 0 14px 26px rgba(65, 45, 21, 0.18);
 }
 
-/*item ganjil di sebelah kiri garis
-.timeline-item:nth-child(odd) .timeline-card {
-    grid-column: 1;
-    justify-self: end;
-    flex-direction: row;
-}
-
-item genap di sebelah kanan garis
-.timeline-item:nth-child(even) .timeline-card {
-    grid-column: 2;
-    justify-self: start;
-    flex-direction: row-reverse;
-}*/
-
 /*untuk set ukuran photo ga berubah*/
 .timeline-photo {
     flex-shrink: 0;
@@ -708,6 +694,166 @@ item genap di sebelah kanan garis
     flex-wrap: wrap;
     gap: 0.4rem;
     justify-content: flex-start;
+}
+
+/* education header, search, delete modal */
+
+.education-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.education-header h1 {
+    margin-bottom: 0;
+}
+
+.education-add-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.education-add-button span {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.education-search {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.education-search__input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+}
+
+.education-search__input:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
+}
+
+.education-delete-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 1rem;
+    border: 0;
+    background: transparent;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+}
+
+.education-delete-modal:popover-open {
+    display: flex;
+}
+
+.education-delete-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    background: rgba(28, 25, 23, 0.58);
+    cursor: default;
+}
+
+.education-delete-modal__content {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 480px);
+    padding: 1.5rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 1rem 3rem rgba(28, 25, 23, 0.22);
+}
+
+.education-delete-modal__content h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+}
+
+.education-delete-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.education-delete-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.button-danger {
+    background: #b42318;
+}
+
+@media (max-width: 600px) {
+    .education-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .education-add-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .education-search {
+        flex-direction: column;
+    }
+
+    .education-search .button {
+        width: 100%;
+    }
+
+    .education-delete-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .education-delete-modal__content {
+        width: 100%;
+        padding: 1.25rem;
+        border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .education-delete-modal__actions {
+        flex-direction: column-reverse;
+    }
+
+    .education-delete-modal__actions .button {
+        width: 100%;
+        text-align: center;
+    }
 }
 
 .skill-badge {
@@ -778,4 +924,70 @@ item genap di sebelah kanan garis
     color: var(--ink, #1a202c);
     font-weight: 500;
     white-space: nowrap; /* Mencegah teks terpotong */
+}
+
+.education-form {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.7rem;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    font: inherit;
+    transition:
+        border-color 0.2s ease,
+        outline-color 0.2s ease;
+}
+
+.form-group input[type="checkbox"] {
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
+}
+
+.form-error {
+    color: #b42318;
+    font-size: 0.85rem;
+    margin-top: 0.35rem;
+}
+
+.button {
+    display: inline-block;
+    height: fit-content;
+    border: 0;
+    border-radius: var(--radius);
+    padding: 0.65rem 1rem;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.button-secondary {
+    background: var(--ink);
 }
