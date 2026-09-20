@@ -517,6 +517,8 @@ h1, .brand, .skills-title, .skills-column-title {
     background-color: var(--accent-dark);
     border: 1px solid var(--line);
     border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
 }
 
 .experience-photo {
@@ -554,6 +556,7 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .experience-status {
     margin-top: 1rem;
+    margin-bottom: 1.5rem;
     font-size: 0.85rem;
     font-weight: 600;
     color: antiquewhite;
@@ -926,7 +929,7 @@ h1, .brand, .skills-title, .skills-column-title {
     white-space: nowrap; /* Mencegah teks terpotong */
 }
 
-.education-form {
+.form {
     width: 100%;
     max-width: 100%;
     margin-top: 1.5rem;
@@ -975,19 +978,204 @@ h1, .brand, .skills-title, .skills-column-title {
 }
 
 .button {
-    display: inline-block;
-    height: fit-content;
-    border: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+    box-sizing: border-box;
+    line-height: 1.2;
+    vertical-align: middle;      
+    appearance: none;             
+    -webkit-appearance: none;    
+    border: 1.5px solid transparent;
     border-radius: var(--radius);
     padding: 0.65rem 1rem;
     background: var(--accent);
     color: white;
     cursor: pointer;
-    font: inherit;
+    font-size: 1rem;
     font-weight: 700;
     text-decoration: none;
 }
 
 .button-secondary {
-    background: var(--ink);
+    background: transparent;
+    border-color: var(--paper);
+    color: var(--paper);
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.button-secondary:hover {
+    background: var(--paper);
+    color: var(--ink);
+}
+
+/* experience header, search, actions, delete modal */
+
+.experience-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.experience-header h1 {
+    margin-bottom: 0;
+}
+
+.experience-add-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.experience-add-button span {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.experience-search {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.experience-search__input {
+    width: 100%;
+    min-width: 0;
+    padding: 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--ink);
+    font: inherit;
+}
+
+.experience-search__input:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
+}
+
+.experience-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: auto;
+    margin-bottom: 1rem;
+}
+
+.experience-delete-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 1rem;
+    border: 0;
+    background: transparent;
+    z-index: 10;
+    align-items: center;
+    justify-content: center;
+}
+
+.experience-delete-modal:popover-open {
+    display: flex;
+}
+
+.experience-delete-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    padding: 0;
+    background: rgba(28, 25, 23, 0.58);
+    cursor: default;
+}
+
+.experience-delete-modal__content {
+    position: relative;
+    z-index: 1;
+    width: min(100%, 480px);
+    padding: 1.5rem;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: 0 1rem 3rem rgba(28, 25, 23, 0.22);
+}
+
+.experience-delete-modal__content h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.5rem;
+}
+
+.experience-delete-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.experience-delete-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.experience-actions .button {
+    height: 52px;
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .experience-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .experience-add-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .experience-search {
+        flex-direction: column;
+    }
+
+    .experience-search .button {
+        width: 100%;
+    }
+
+    .experience-delete-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .experience-delete-modal__content {
+        width: 100%;
+        padding: 1.25rem;
+        border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .experience-delete-modal__actions {
+        flex-direction: column-reverse;
+    }
+
+    .experience-delete-modal__actions .button {
+        width: 100%;
+        text-align: center;
+    }
 }

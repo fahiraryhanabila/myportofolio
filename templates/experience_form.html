@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% block meta %}
-    <title>Add Education - {{ name }}</title>
+     <title>{% if is_edit %}Edit{% else %}Add New{% endif %} Experience - {{ name }}</title>
 {% endblock meta %}
 {% block content %}
     <main>
-        <section class="education-section">
+        <section class="experience-section">
             <div class="container">
-                <h1>{% if form.instance.pk %}Edit Education{% else %}Add New Education{% endif %}</h1>
+                <h1>{% if is_edit %}Edit Experience{% else %}Add New Experience{% endif %}</h1>
                 <form method="post"
-                    action="{% if form.instance.pk %}{% url 'main:edit_education' form.instance.pk %}{% else %}{% url 'main:create_education' %}{% endif %}"
-                    class="form">
+                      action="{% if is_edit %}{% url 'main:edit_experience' experience_id %}{% else %}{% url 'main:create_experience' %}{% endif %}"
+                      class="form">
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="form-group">
@@ -21,9 +21,9 @@
                         </div>
                     {% endfor %}
                     <button type="submit" class="button">
-                        {% if form.instance.pk %}Save changes{% else %}Add New Education{% endif %}
+                        {% if is_edit %}Save changes{% else %}Add Experience{% endif %}
                     </button>
-                    <a href="{% url 'main:show_education' %}" class="button button-secondary">Batal</a>
+                    <a href="{% url 'main:show_experience' %}" class="button button-secondary">Batal</a>
                 </form>
             </div>
         </section>

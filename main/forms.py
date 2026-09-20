@@ -1,6 +1,7 @@
 from django.forms import ModelForm, TextInput, Textarea, NumberInput, URLInput, CheckboxInput, Select
 
 from main.models import Education
+from main.models import Experience
 
 class EducationForm(ModelForm):
     class Meta:
@@ -61,5 +62,46 @@ class EducationForm(ModelForm):
                 attrs={
                     "placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000",
                 }
+            ),
+        }
+
+from django.forms import ModelForm, TextInput, Textarea, URLInput, Select, DateTimeInput
+
+class ExperienceForm(ModelForm):
+    class Meta:
+        model = Experience
+        fields = [
+            "title",
+            "description",
+            "category",
+            "thumbnail",
+            "ended_at",
+        ]
+
+        labels = {
+            "title": "Judul Pengalaman",
+            "description": "Deskripsi",
+            "category": "Jenis Kegiatan",
+            "thumbnail": "URL Gambar",
+            "ended_at": "Tanggal Selesai",
+        }
+
+        widgets = {
+            "title": TextInput(
+                attrs={"placeholder": "Masukkan nama experience atau pengalaman"}
+            ),
+            "description": Textarea(
+                attrs={"placeholder": "Ceritakan pengalamanmu", "rows": 3}
+            ),
+            "category": Select(),
+            "thumbnail": URLInput(
+                attrs={"placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000"}
+            ),
+            "ended_at": DateTimeInput(
+                attrs={
+                    "type": "datetime-local",
+                    "placeholder": "Pilih tanggal selesai",
+                },
+                format="%Y-%m-%dT%H:%M",
             ),
         }
