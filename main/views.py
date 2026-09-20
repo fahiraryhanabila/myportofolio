@@ -5,6 +5,7 @@ from django.contrib import messages
 from main.models import Experience
 from main.models import Education
 from main.forms import EducationForm
+from main.forms import ExperienceForm
 
 from django.core import serializers
 from django.http import HttpResponse
@@ -25,9 +26,18 @@ def show_main(request):
 
 
 def show_experience(request):
+    json_response = get_experience_json(request)
+
+    experience = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+    experience = [item.object for item in experience]
+    title_query = request.GET.get("title", "").strip()
     context = {
         "name": "Fahira",
-        "experience_list": Experience.objects.all(),
+        "experience_list": experience,
+        "title_query": title_query,
     }
     return render(request, "experience.html", context)
 
@@ -81,13 +91,80 @@ def delete_education(request, education_id):
 
     return redirect("main:show_education")
 
+def edit_education(request, education_id):
+    education = get_object_or_404(Education, pk=education_id)
+    form = EducationForm(request.POST or None, instance=education)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Riwayat pendidikan berhasil diperbarui!")
+        return redirect("main:show_education")
+
+    context = {
+        "name": "Fahira",
+        "form": form,
+    }
+    return render(request, "education_form.html", context)
+
+def create_experience(request):
+    form = ExperienceForm(request.POST or None)
+    
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Riwayat pengalaman baru berhasil ditambahkan!")
+        return redirect("main:show_experience")
+    context = {
+        "name": "Fahira Ryhanabila",
+        "form": form,
+        "is_edit": False,
+    }
+    return render(request, "experience_form.html", context)
+
+def get_experience_json(request):
+    title_query = request.GET.get("title", "").strip()
+    experience = Experience.objects.all()
+    
+    if title_query:
+        experience = experience.filter(title__icontains=title_query)
+    
+    experience_json = serializers.serialize("json", experience)
+    return HttpResponse(experience_json, content_type="application/json")
+
+def delete_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    
+    if request.method == "POST":
+        experience.delete()
+        messages.success(request, "Riwayat experience berhasil ditambahkan!")
+        return redirect("main:show_experience")
+    
+    return redirect("main:show_experience")
+
+def edit_experience(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+    form = ExperienceForm(request.POST or None, instance=experience)
+    
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Riwayat pengalaman berhasil diperbarui!")
+        return redirect("main:show_experience")
+    
+    context = {
+        "name": "Fahira",
+        "form": form,
+        "is_edit": True,  
+        "experience_id": experience_id,  
+    }
+    return render(request, "experience_form.html", context)
+
+
 def seeder_data(request):
     Experience.objects.update_or_create(
         title="Staff Ambassador Open House Fasilkom UI",
         defaults={
             "description": "Managed the Open House Fasilkom UI Ambassador program, including candidate selection, organizing supporting events and the farewell party, and monitoring ambassador performance in producing promotional content.",
             "category": "part-time",
-            "ended_at": "2025-11-04",
+            "ended_at": "2025",
             "thumbnail": "/static/img/ambass-photo.jpeg",
         }
     )
@@ -97,7 +174,7 @@ def seeder_data(request):
         defaults={
             "description": "Served as the main communication bridge between BETIS Fasilkom UI and high school students, managed BETIS's content and social media accounts, drafted broadcast announcements, and disseminated registration information.",
             "category": "part-time",
-            "ended_at": "2025-09-01",
+            "ended_at": "2025",
             "thumbnail": "/static/img/betis-photo.jpeg",
         }
     )
@@ -127,7 +204,7 @@ def seeder_data(request):
         defaults={
             "description": "Volunteered as a facilitator, guiding participants throughout the Baitul Arqam Madya program and supporting their learning and engagement.",
             "category": "volunteer",
-            "ended_at": "2026-01-02",
+            "ended_at": "2026",
             "thumbnail": "/static/img/ba-photo.jpeg",
         }
     )
@@ -137,7 +214,7 @@ def seeder_data(request):
         defaults={
             "description": "Supported student advocacy and welfare initiatives by assisting in identifying student concerns, developing solutions, and organizing related programs.",
             "category": "internship",
-            "ended_at": "2026-01-02",
+            "ended_at": "2026",
             "thumbnail": "/static/img/adkesma-photo.jpeg",
         }
     )
