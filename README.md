@@ -183,7 +183,63 @@ Proyek ini dikembangkan dengan bantuan asisten berbasis Kecerdasan Buatan (AI) u
 | **10** | Mengonfirmasi cara kerja fungsi `max-width` pada CSS. | Menjelaskan fungsi `max-width` dalam membatasi lebar maksimal elemen di layar berukuran besar. | Menerapkan `max-width: 960px` pada `.container` dan `max-width: 100%` pada elemen gambar agar responsif. |
 
 ### 5. Evaluasi Kritis terhadap Penggunaan AI
-
 AI digunakan sebagai alat bantu dalam proses pengembangan, bukan sebagai pengganti proses pemrograman yang saya lakukan. Saya tidak langsung menerapkan seluruh solusi yang diberikan AI, tetapi terlebih dahulu memahami alasan dan logika di balik setiap saran, kemudian menyesuaikannya dengan struktur proyek dan kebutuhan tugas.
 
 Sebagai contoh, ketika AI memberikan saran mengenai struktur komponen dan implementasi fitur, saya membandingkan solusi tersebut dengan kode yang sudah saya miliki sebelum menentukan apakah solusi tersebut sesuai untuk digunakan. Saya juga menggunakan pertanyaan lanjutan (*follow-up prompting*) ketika terdapat konsep yang belum saya pahami, sehingga proses penggunaan AI tidak hanya berfokus pada menghasilkan kode, tetapi juga membantu memahami konsep yang sedang dipelajari.
+
+### Tugas 3
+1. Alasan mengapa menggunakan ModelForm dibanding menggunakan form HTML manual antara lain:
+    - Django dapat secara otomatis men-generate field form, tipe data, dan validasi langsung dari struktur model.
+    - Mengurangi duplikasi kode, terutama untuk Constraint yang banyak dipakai di beberapa file tanpa menulis ulang di HTML.
+    - Melakukan validasi tipe data secara otomatis dan cukup dengan memanggil form.save() untuk menyimpan data ke database.
+    - Jika model suatu saat berubah, form akan menyesuaikan secara otomatis tanpa merombak kode HTML dari nol.
+    - ModelForm dapat membuat proses CRUD menjadi lebih sederhana melalui form.save() yang berfungsi untuk membuat data baru maupun mengubah data yang sudah ada.
+Sedangkan penambahan `{% csrf_token %}` pada form memiliki kegunaan, yaitu:
+    - Mencegah pihak luar atau website lain dalam memalsukan request (*Cross-Site Request Forgery*) atas nama pengguna yang sedang login.
+    - Django menyisipkan token unik ke form dan mencocokkannya dengan sesi pengguna saat disubmit; request tanpa token yang valid akan langsung ditolak.
+
+2. JSON lebih disukai dibandingkan XML hal ini didukung dengan Kegunaan JSON, yaitu:
+    - JSON lebih ringkas karena tidak membutuhkan tag pembuka dan penutup yang panjang seperti XML (`"key": "value"`).
+    - `JSON.parse()` membuat JSON dapat langsung di parsing tanpa library tambahan.
+    - Struktur objek dan array pada JSON secara komputasi lebih ringan dibanding fitur kompleks XML.
+    - Penggunaan format *key-value* membuat kode menjadi lebih intuitif dan mudah dibaca oleh manusia.
+    - Menjadi format *default* untuk mayoritas REST API modern, sehingga membuat integrasi antar sistem lebih seragam.
+
+3. Alur yang terjadi saat menggunakan fungsi view untuk mengembalikan data portofolio dalam bentuk JSON, yaitu:
+    - Client mengakses URL endpoint, (misal `/api/experience/`).
+    - Fungsi view akan memanggil data dari database menggunakan Django ORM melalui `Experience.objects.all()`.
+    - QuerySet objek Python tersebut diserialisasi menjadi string JSON menggunakan `serializers.serialize("json", experience)`.
+    - Hasil serialisasi dikembalikan ke client menggunakan `HttpResponse` dengan `content_type="application/json"`.
+Alasan diperlukannya proses serialization pada model Django sebelum data dikembalikan, antara lain:
+- Objek Python yang hidup di memori server tidak bisa dikirimkan secara langsung melalui protokol HTTP yang berbasis teks/byte.
+-  Mengubah objek internal Python menjadi format standar berbasis teks (JSON) agar dapat dibaca dan diproses oleh berbagai bahasa pemrograman atau platform lain (seperti *frontend* JavaScript, aplikasi *mobile*, dll).
+
+### **AI Disclosure - Tugas 3**
+Proyek ini dikembangkan dengan bantuan asisten berbasis Kecerdasan Buatan (AI) untuk mendukung proses **pemahaman konsep, konsultasi teknis, implementasi, debugging, serta verifikasi hasil pengembangan**. AI digunakan sebagai sarana pendukung dalam memahami konsep Django, data delivery, serta pengelolaan repository menggunakan Git dan GitHub. Keputusan dan implementasi akhir tetap dilakukan oleh saya berdasarkan kebutuhan dan kondisi proyek.
+
+### **1. Alat AI yang Digunakan**
+* **ChatGPT** (Model Bahasa / AI Assistant)
+
+### **2. Ruang Lingkup Bantuan AI**
+* **Pemahaman Konsep Django:** Membantu menjelaskan konsep `ModelForm`, proses Create dan Update, penggunaan `instance`, serta mekanisme pengambilan object berdasarkan `id` atau unique fields.
+* **Form Validation & Security:** Menjelaskan alasan penggunaan `ModelForm` dibandingkan form HTML manual serta fungsi `{% csrf_token %}` untuk perlindungan terhadap serangan *Cross-Site Request Forgery* (CSRF).
+* **Data Delivery:** Membantu memahami konsep data delivery menggunakan format JSON dan XML serta alasan penggunaan JSON dalam pengembangan aplikasi web.
+* **Serialization:** Menjelaskan proses mengubah object/model Django menjadi format JSON agar data dapat dikirim melalui HTTP dan digunakan oleh client.
+* **Django API / Endpoint:** Membantu menjelaskan alur request ketika client mengakses endpoint seperti `/api/experience/`, mulai dari pengambilan data menggunakan Django ORM hingga pengembalian data dalam bentuk JSON.
+* **Debugging & Update Feature:** Membantu memahami error pada proses Update, khususnya ketika object `Experience` tidak ditemukan berdasarkan ID yang diberikan pada URL.
+* **Git & GitHub:** Membantu memahami proses *branching*, *merge*, sinkronisasi `main` dengan `origin/main`, serta interpretasi Git Graph setelah proses *merge*.
+* **Verifikasi Repository:** Membantu memeriksa hasil `git status` untuk memastikan branch lokal telah sinkron dengan branch `main` pada GitHub.
+
+### **3. Strategi *Prompting***
+* **Contextual Prompting:** Memberikan konteks berupa struktur proyek, kode, pesan error, kondisi repository, maupun pertanyaan refleksi agar AI dapat memberikan bantuan yang sesuai dengan permasalahan yang sedang dihadapi.
+* **Iterative & Conversational Prompting:** Mengajukan pertanyaan secara bertahap berdasarkan respons AI. Pertanyaan lanjutan digunakan untuk memperdalam pemahaman atau memastikan bahwa solusi yang diberikan sesuai dengan kondisi proyek.
+* **Problem-Based Questioning:** Mengajukan permasalahan teknis secara spesifik, seperti error `No Experience matches the given query`, penggunaan `instance` pada ModelForm, serta kondisi branch setelah proses *merge*.
+* **Verification Prompting:** Memberikan hasil aktual dari implementasi atau terminal, seperti output `git status`, untuk memvalidasi kondisi proyek dan memastikan solusi yang diberikan sesuai dengan keadaan repository.
+* **Conceptual Follow-up:** Menggunakan pertanyaan lanjutan untuk memahami alasan di balik suatu implementasi, bukan hanya meminta kode. Contohnya adalah menanyakan alasan penggunaan serialization sebelum data model dikembalikan dalam bentuk JSON.
+
+### **4. Log *Prompting* AI**
+Link log *prompting* =  https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+
+### **5. Evaluasi Kritis terhadap Penggunaan AI**
+AI digunakan sebagai alat bantu pembelajaran, konsultasi teknis, dan verifikasi, bukan sebagai pengganti proses pemrograman yang saya lakukan. Dalam pengerjaan Tugas 3, AI membantu memahami konsep **ModelForm, Update, CSRF, JSON, serialization, data delivery, serta Git dan GitHub**. Penggunaan AI dilakukan secara iteratif dan kontekstual dengan memberikan permasalahan atau kondisi aktual, kemudian mengajukan pertanyaan lanjutan untuk memperdalam pemahaman dan memverifikasi solusi.
+Saya tidak menerapkan seluruh saran AI secara langsung, tetapi terlebih dahulu memahami dan menyesuaikannya dengan struktur serta kebutuhan proyek. Hasil implementasi kemudian diverifikasi melalui pengujian aplikasi dan pemeriksaan repository menggunakan Git. Dengan demikian, AI berperan sebagai **pendukung proses pembelajaran dan pemecahan masalah teknis**, sedangkan implementasi, pengujian, verifikasi, dan pengambilan keputusan akhir tetap dilakukan oleh saya.
