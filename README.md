@@ -10,6 +10,9 @@ Konten pada halaman portofolio ini meliputi:
 - **Credentials Section**: Menampilkan logo dan nama kepanitiaan yang pernah diikuti (Open House Fasilkom UI 2025, BETIS Fasilkom UI, COMPFEST 18, FUKI Fasilkom UI) dalam tata letak sejajar.
 - **About Me Section**: Perkenalan singkat mengenai diri saya, dilengkapi highlight area keahlian (Product Management, UX & Research, Technology & Business) beserta ikon masing-masing.
 - **Interactive Skills Section**: Tata letak 2 kolom (Hard Skills & Soft Skills) berbentuk kartu (*card*) yang dapat diklik untuk efek "terangkat" (*is-raised*), serta menampilkan deskripsi tambahan saat *hover*.
+- **Experience Page**: Menampilkan riwayat pengalaman kepanitiaan, organisasi, dan volunteer dalam bentuk kartu, lengkap dengan kategori kegiatan (*part-time*, *internship*, *volunteer*, dsb.), status keberlangsungan (sedang berlangsung/selesai), dan gambar pendukung. Dilengkapi fitur pencarian berdasarkan nama kegiatan, serta fitur tambah, ubah, dan hapus data melalui form.
+- **Education Page**: Menampilkan jenjang pendidikan yang pernah/sedang ditempuh dalam format *timeline*, mencakup jenjang pendidikan, tahun mulai dan selesai, deskripsi, serta daftar *skill* yang diperoleh pada tiap jenjang. Dilengkapi fitur pencarian, serta fitur tambah, ubah, dan hapus data melalui form.
+- **Form & Data Delivery**: Data pada halaman Experience dan Education dikelola menggunakan `ModelForm` Django, dengan validasi otomatis dan proteksi CSRF pada setiap form. Data juga dapat diakses dalam format JSON melalui endpoint API (`/api/experience/` dan `/api/education/`), yang mendukung *query parameter* untuk pencarian berdasarkan judul.
 - **Responsive Layout**: Tata letak menyesuaikan otomatis antara tampilan desktop dan mobile menggunakan CSS Grid, Flexbox, `clamp()` untuk ukuran font, dan `@media` *query* untuk perubahan susunan elemen.
 
 ## Cara Menjalankan Proyek Secara Lokal
@@ -238,7 +241,39 @@ Proyek ini dikembangkan dengan bantuan asisten berbasis Kecerdasan Buatan (AI) u
 * **Conceptual Follow-up:** Menggunakan pertanyaan lanjutan untuk memahami alasan di balik suatu implementasi, bukan hanya meminta kode. Contohnya adalah menanyakan alasan penggunaan serialization sebelum data model dikembalikan dalam bentuk JSON.
 
 ### **4. Log *Prompting* AI**
-Link log *prompting* =  https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+Penggunaan AI dalam Tugas 3 didokumentasikan untuk menunjukkan bagian-bagian proses pengembangan yang mendapatkan bantuan AI.
+
+**Format Log:** `[ID] / [Tugas] - [Deskripsi Penggunaan AI]: [Link ke Chat]`
+
+Keterangan:
+- **ID** = nomor urut interaksi AI.
+- **Tugas** = nomor tugas/tutorial yang dikerjakan.
+- **Deskripsi Penggunaan AI** = ringkasan tujuan atau topik bantuan AI.
+- **Link ke Chat** = tautan menuju percakapan AI yang digunakan.
+
+**001 / Tugas 3 - Pemahaman alur Update menggunakan ID dan `instance`:** https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+Membantu memahami proses Update, khususnya pengambilan object berdasarkan ID, penggunaan `get_object_or_404()`, pengisian `ModelForm` menggunakan `instance`, serta penyimpanan perubahan menggunakan `form.save()`.
+
+**002 / Tugas 3 - Perancangan ModelForm untuk fitur CRUD:** https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+Membantu memahami alasan penggunaan `ModelForm` dibandingkan form HTML manual, termasuk otomatisasi field dan validasi berdasarkan model serta kemudahan implementasi proses Create dan Update.
+
+**003 / Tugas 3 - Pemahaman keamanan form dengan CSRF:** https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+Membantu memahami fungsi `{% csrf_token %}` pada form Django dalam melindungi request dari serangan *Cross-Site Request Forgery* (CSRF).
+
+**004 / Tugas 3 - Analisis JSON dan XML untuk data delivery:** https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+Membantu memahami perbedaan JSON dan XML sebagai format data delivery, terutama dari sisi struktur data, keterbacaan, ukuran data, dan kemudahan pertukaran data antarplatform.
+
+**005 / Tugas 3 - Analisis alur data delivery dan serialization:** https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+Membantu memahami alur pengiriman data dari database hingga client melalui endpoint, mulai dari pengambilan data menggunakan Django ORM, proses serialization menggunakan `serializers.serialize("json", ...)`, hingga pengembalian data melalui `HttpResponse` dengan `content_type="application/json"`.
+
+**006 / Tugas 3 - Debugging proses Update:** https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+Membantu menganalisis error `No Experience matches the given query` pada proses Update dengan menghubungkan ID yang terdapat pada URL dengan object `Experience` yang dicari pada database.
+
+**007 / Tugas 3 - Verifikasi branch dan proses merge Git:** https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+Membantu memahami tampilan Git Graph setelah proses merge, termasuk alasan branch dan riwayat commit yang telah di-merge masih terlihat pada repository.
+
+**008 / Tugas 3 - Sinkronisasi repository lokal dengan GitHub:** https://chatgpt.com/share/6ab00afb-9404-83ec-9e2e-48af8ed7914c
+Membantu menjelaskan fungsi `git pull origin main`, perbedaan `git pull` dan `git push`, serta penggunaan `git status` untuk memverifikasi bahwa branch `main` lokal telah sinkron dengan `origin/main`.
 
 ### **5. Evaluasi Kritis terhadap Penggunaan AI**
 AI digunakan sebagai alat bantu pembelajaran, konsultasi teknis, dan verifikasi, bukan sebagai pengganti proses pemrograman yang saya lakukan. Dalam pengerjaan Tugas 3, AI membantu memahami konsep **ModelForm, Update, CSRF, JSON, serialization, data delivery, serta Git dan GitHub**. Penggunaan AI dilakukan secara iteratif dan kontekstual dengan memberikan permasalahan atau kondisi aktual, kemudian mengajukan pertanyaan lanjutan untuk memperdalam pemahaman dan memverifikasi solusi.
