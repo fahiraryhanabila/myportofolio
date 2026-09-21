@@ -209,14 +209,12 @@ Sedangkan penambahan `{% csrf_token %}` pada form memiliki kegunaan, yaitu:
     - Menjadi format *default* untuk mayoritas REST API modern, sehingga membuat integrasi antar sistem lebih seragam.
 
 3. Alur yang terjadi saat menggunakan fungsi view untuk mengembalikan data portofolio dalam bentuk JSON, yaitu:
-- Client mengakses URL endpoint, (misal `/api/experience/`).
-- Fungsi view akan memanggil data dari database menggunakan Django ORM melalui `Experience.objects.all()`.
-- QuerySet objek Python tersebut diserialisasi menjadi string JSON menggunakan `serializers.serialize("json", experience)`.
-- Hasil serialisasi dikembalikan ke client menggunakan `HttpResponse` dengan `content_type="application/json"`.
+    - Client mengakses URL endpoint, (misal `/api/experience/`).
+    - Fungsi view akan memanggil data dari database menggunakan Django ORM melalui `Experience.objects.all()`.
+    - QuerySet objek Python tersebut diserialisasi menjadi string JSON menggunakan `serializers.serialize("json", experience)`.
+    - Hasil serialisasi dikembalikan ke client menggunakan `HttpResponse` dengan `content_type="application/json"`.
 
-Alasan diperlukannya proses serialization pada model Django sebelum data dikembalikan, antara lain:
-- Objek Python yang hidup di memori server tidak bisa dikirimkan secara langsung melalui protokol HTTP yang berbasis teks/byte.
-- Mengubah objek internal Python menjadi format standar berbasis teks (JSON) agar dapat dibaca dan diproses oleh berbagai bahasa pemrograman atau platform lain (seperti *frontend* JavaScript, aplikasi *mobile*, dll).
+Alasan diperlukannya proses serialization pada model Django sebelum data dikembalikan, antara lain karena objek Python yang hidup di memori server tidak bisa dikirimkan secara langsung melalui protokol HTTP yang berbasis teks/byte. Selain itu, proses serialization mengubah objek internal Python menjadi format standar berbasis teks (JSON) agar dapat dibaca dan diproses oleh berbagai bahasa pemrograman atau platform lain, seperti *frontend* JavaScript dan aplikasi *mobile*.
 
 ### **AI Disclosure - Tugas 3**
 Proyek ini dikembangkan dengan bantuan asisten berbasis Kecerdasan Buatan (AI) untuk mendukung proses **pemahaman konsep, konsultasi teknis, implementasi, debugging, serta verifikasi hasil pengembangan**. AI digunakan sebagai sarana pendukung dalam memahami konsep Django, data delivery, serta pengelolaan repository menggunakan Git dan GitHub. Keputusan dan implementasi akhir tetap dilakukan oleh saya berdasarkan kebutuhan dan kondisi proyek.
