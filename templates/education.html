@@ -9,11 +9,13 @@
                 <p class="section-kicker">Here's my education journey</p>
                 <div class="education-header">
                     <h1 class="section-title">Education</h1>
-                    <a href="{% url 'main:create_education' %}"
-                       class="button education-add-button">
-                        <span aria-hidden="true">+</span>
-                        Tambah Pendidikan
-                    </a>
+                    {% if user.is_superuser %}
+                        <a href="{% url 'main:create_education' %}"
+                           class="button education-add-button">
+                            <span aria-hidden="true">+</span>
+                            Tambah Pendidikan
+                        </a>
+                    {% endif %}
                 </div>
                 <p class="section-description">
                     From where I started to where I am today. Each phase of my education has shaped my curiosity, values, and the person I am becoming.
@@ -66,8 +68,14 @@
                                             {% endfor %}
                                         </div>
                                     {% endif %}
+                                    
+                                    {% if user.is_authenticated %}
+                                        {% include "components/education_star.html" with education=education %}
+                                    {% endif %}
 
-                                    {% include "components/education_delete_modal.html" with education=education %}
+                                    {% if user.is_superuser %}
+                                        {% include "components/education_delete_modal.html" with education=education %}
+                                    {% endif %}
                                 </div>
                             </article>
                         </div>
