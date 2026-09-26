@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 import uuid
+from django.contrib.auth.models import User  # Tambahkan baris ini
 from django.db import models
 
 class Experience(models.Model):
@@ -19,6 +20,9 @@ class Experience(models.Model):
     description = models.TextField()
     category = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='full-time')
     thumbnail = models.URLField(blank=True, null=True)
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_experiences", blank=True
+    )
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
     def __str__(self):
@@ -43,6 +47,9 @@ class Education(models.Model):
     category_edu = models.CharField(max_length=20, choices=EDUCATIONAL_LEVEL)
     skills = models.CharField(max_length=255, blank=True, default="")
     thumbnail = models.URLField(blank=True, null=True)
+    starred_by = models.ManyToManyField(
+        User, related_name="starred_projects", blank=True
+    )
     
     @property
     def skill_list(self):
