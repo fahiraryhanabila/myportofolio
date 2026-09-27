@@ -8,11 +8,12 @@ Sebuah website portofolio personal yang interaktif dan responsif, guna memenuhi 
 Konten pada halaman portofolio ini meliputi:
 - **Hero Section**: Menampilkan identitas utama (nama, program studi, NPM), tagline personal, serta tautan menuju GitHub, LinkedIn, dan Email, dengan latar belakang visual bertema kampus.
 - **Credentials Section**: Menampilkan logo dan nama kepanitiaan yang pernah diikuti (Open House Fasilkom UI 2025, BETIS Fasilkom UI, COMPFEST 18, FUKI Fasilkom UI) dalam tata letak sejajar.
-- **About Me Section**: Perkenalan singkat mengenai diri saya, dilengkapi highlight area keahlian (Product Management, UX & Research, Technology & Business) beserta ikon masing-masing.
+- **About Me Section**: Perkenalan singkat mengenai diri.
 - **Interactive Skills Section**: Tata letak 2 kolom (Hard Skills & Soft Skills) berbentuk kartu (*card*) yang dapat diklik untuk efek "terangkat" (*is-raised*), serta menampilkan deskripsi tambahan saat *hover*.
-- **Experience Page**: Menampilkan riwayat pengalaman kepanitiaan, organisasi, dan volunteer dalam bentuk kartu, lengkap dengan kategori kegiatan (*part-time*, *internship*, *volunteer*, dsb.), status keberlangsungan (sedang berlangsung/selesai), dan gambar pendukung. Dilengkapi fitur pencarian berdasarkan nama kegiatan, serta fitur tambah, ubah, dan hapus data melalui form.
-- **Education Page**: Menampilkan jenjang pendidikan yang pernah/sedang ditempuh dalam format *timeline*, mencakup jenjang pendidikan, tahun mulai dan selesai, deskripsi, serta daftar *skill* yang diperoleh pada tiap jenjang. Dilengkapi fitur pencarian, serta fitur tambah, ubah, dan hapus data melalui form.
-- **Form & Data Delivery**: Data pada halaman Experience dan Education dikelola menggunakan `ModelForm` Django, dengan validasi otomatis dan proteksi CSRF pada setiap form. Data juga dapat diakses dalam format JSON melalui endpoint API (`/api/experience/` dan `/api/education/`), yang mendukung *query parameter* untuk pencarian berdasarkan judul.
+- **Autentikasi & Otorisasi Pengguna**: Pengunjung dapat melakukan Register, Login, dan Logout menggunakan sistem autentikasi bawaan Django, dengan status login di navbar dan waktu login terakhir tercatat melalui cookie. Hak akses dibagi menjadi empat peran: pengunjung (hanya baca), pengguna terdaftar (baca & star), editor (dapat mengubah data dan melakukan role user), dan superuser (akses penuh).
+- **Experience Page**: Menampilkan riwayat pengalaman kepanitiaan, organisasi, dan volunteer dalam bentuk kartu berisi kategori, status keberlangsungan, dan gambar pendukung. Dilengkapi fitur pencarian, *star*/*unstar*, serta tambah/ubah/hapus data sesuai hak akses peran.
+- **Education Page**: Menampilkan riwayat pendidikan dalam format *timeline*, mencakup jenjang, tahun, deskripsi, dan daftar *skill* yang diperoleh. Dilengkapi fitur pencarian, *star*/*unstar*, serta tambah/ubah/hapus data sesuai hak akses peran.
+- **Form & Data Delivery**: Data Experience dan Education dikelola lewat `ModelForm` Django dengan validasi otomatis dan proteksi CSRF. Data juga tersedia dalam format JSON melalui endpoint `/api/experience/` dan `/api/education/` yang mendukung pencarian berdasarkan judul.
 - **Responsive Layout**: Tata letak menyesuaikan otomatis antara tampilan desktop dan mobile menggunakan CSS Grid, Flexbox, `clamp()` untuk ukuran font, dan `@media` *query* untuk perubahan susunan elemen.
 
 ## Cara Menjalankan Proyek Secara Lokal
@@ -277,3 +278,57 @@ Membantu menjelaskan fungsi `git pull origin main`, perbedaan `git pull` dan `gi
 ### **5. Evaluasi Kritis terhadap Penggunaan AI**
 AI digunakan sebagai alat bantu pembelajaran, konsultasi teknis, dan verifikasi, bukan sebagai pengganti proses pemrograman yang saya lakukan. Dalam pengerjaan Tugas 3, AI membantu memahami konsep **ModelForm, Update, CSRF, JSON, serialization, data delivery, serta Git dan GitHub**. Penggunaan AI dilakukan secara iteratif dan kontekstual dengan memberikan permasalahan atau kondisi aktual, kemudian mengajukan pertanyaan lanjutan untuk memperdalam pemahaman dan memverifikasi solusi.
 Saya tidak menerapkan seluruh saran AI secara langsung, tetapi terlebih dahulu memahami dan menyesuaikannya dengan struktur serta kebutuhan proyek. Hasil implementasi kemudian diverifikasi melalui pengujian aplikasi dan pemeriksaan repository menggunakan Git. Dengan demikian, AI berperan sebagai **pendukung proses pembelajaran dan pemecahan masalah teknis**, sedangkan implementasi, pengujian, verifikasi, dan pengambilan keputusan akhir tetap dilakukan oleh saya.
+
+### Tugas 4
+### **AI Disclosure - Tugas 4**
+AI digunakan dalam proyek ini sebagai sarana pendukung dalam memahami konsep autentikasi dan otorisasi Django, penggunaan Group dan Permission, *server-side authorization*, HTTP 403 Forbidden, serta keamanan form menggunakan CSRF. Keputusan dan implementasi akhir tetap dilakukan oleh saya berdasarkan kebutuhan dan kondisi proyek.
+
+### **1. Alat AI yang Digunakan**
+* **ChatGPT** (Model Bahasa / AI Assistant)
+
+### **2. Ruang Lingkup Bantuan AI**
+* **Role & Permission Django:** Membantu memahami penggunaan ``Group`` dan ``Permission`` untuk membuat role Editor serta membedakan hak akses berdasarkan permission.
+* **Server-Side Authorization:** Membantu memahami penggunaan ``has_perm()`` dan ``permission_required`` untuk membatasi akses terhadap action tertentu serta menghasilkan HTTP 403 Forbidden.
+* **Pengujian Hak Akses:** Membantu menentukan skenario pengujian untuk setiap role serta cara memverifikasi status HTTP melalui Network tab pada browser.
+* **Keamanan Form:** Membantu memahami fungsi CSRF pada form ``POST`` Star/Unstar serta perbedaanya dengan authentication dan permission.
+* **UI/UX:** Membantu mengevaluasi konsistensi tampilan tombol Star pada bagian Education dan Experience berdasarkan state tombol.
+
+### **3. Strategi *Prompting***
+* **Contextual Prompting:** Memberikan konteks mengenai kebutuhan role Editor, struktur hak akses, tampilan antarmuka, serta kondisi implementasi agar AI dapat memberikan bantuan yang sesuai dengan proyek.
+* **Iterative & Conversational Prompting:** Mengajukan pertanyaan secara bertahap berdasarkan respons AI untuk memperjelas implementasi, terutama mengenai role, permission, dan keamanan aplikasi.
+* **Problem-Based Questioning:** Mengajukan permasalahan teknis secara spesifik, seperti penggunaan ``has_perm()``, penambahan role melalui Django Admin, pengujian HTTP 403, serta keamanan from Star/Unstar.
+* **Verification Prompting:** Meminta cara untuk memverifikasi pembatasan hak ases melalui status HTTP dan pengujian langsung pada aplikasi.
+* **UI Evaluation Prompting:** Memberikan kondisi dan tampilan aktual dari proyek untuk memperoleh masukan mengenai konsistensi warna dan state tombol Star pada bagian Education dan Experience.
+* **Conceptual Follow-up:** Mengajukan pertanyaan lanjutan unntuk memahami alasan dibalik penggunaan *permission-based check* dan perbedaan fungsi CSRF, authentication, dan permission.
+
+### **4. Log *Prompting* AI**
+Penggunaan AI dalam Tugas 3 didokumentasikan untuk menunjukkan bagian-bagian proses pengembangan yang mendapatkan bantuan AI.
+
+**Format Log:** `[ID] / [Tugas] - [Deskripsi Penggunaan AI]: [Link ke Chat]`
+
+Keterangan:
+- **ID** = nomor urut interaksi AI.
+- **Tugas** = nomor tugas/tutorial yang dikerjakan.
+- **Deskripsi Penggunaan AI** = ringkasan tujuan atau topik bantuan AI.
+- **Link ke Chat** = tautan menuju percakapan AI yang digunakan
+
+**001 / Tugas 4 - Perancangan role Editor menggunakan Group dan Permission:** https://chatgpt.com/share/6ab92506-7624-83ec-9f91-bda88225bbfb
+Membantu memahami cara membuat role Editor menggunakan fitur ``Group`` dan ``Permission`` yang disediakan Django serta menentukan permission yang sesuai untuk role tersebut.
+
+**002 / Tugas 4 - Pembatasan hak akses berdasarkan role:** https://chatgpt.com/share/6ab92506-7624-83ec-9f91-bda88225bbfb
+Membantu memahami perbedaan hak akses antara User, Editor, dan Admin serta penyesuaian action yang dapat dilakukan masing-masing role.
+
+**003 / Tugas 4 - Pengujian server-side authorization dan HTTP 403 Forbidden:** https://chatgpt.com/share/6ab92506-7624-83ec-9f91-bda88225bbfb
+Membantu memahami cara memastikan pembatasan hak akses dilakukan di sisi server, termasuk pengujian akses endpoint yang tidak diizinkan dan verifikasi bahwa server mengembalikan HTTP 403 Forbidden.
+
+**004 / Tugas 4 - Penyusunan skenario pengujian role:** https://chatgpt.com/share/6ab92506-7624-83ec-9f91-bda88225bbfb
+Membantu menyusun skenario pengujian untuk Guest, User, Editor, dan Admin dengan membandingkan action yang diperbolehkan dan hasil yang diharapkan.
+
+**005 / Tugas 4 - Keamanan form Star/Unstar** https://chatgpt.com/share/6ab92506-7624-83ec-9f91-bda88225bbfb
+Membantu memahami fungsi CSRF token pada form ``POST`` Star/Unstar serta perbedaan antara perlindungan CSRF, authentication, dan permission dalam mengamankan suatu action.
+
+**006 / Tugas 4 - Konsultasi konsistensi UI tombol Star:** https://chatgpt.com/share/6ab92506-7624-83ec-9f91-bda88225bbfb
+Membantu mengevaluasi perbedaan warna tombol Star pada bagian Education dan Experience serta menentukan pendekatan styling berdasarkan state tombol agar tampilan lebih konsisten.
+
+### **5. Evaluasi Kritis terhadap Penggunaan AI**
+AI digunakan dalam membantu pemahaman terkait konsep role, permission, *server-side authorization*, HTTP 403 Forbidden, serta keamanan CSRF pada form Star/Unstar. Setiap saran dari AI tetap saya sesuaikan dengan kondisi dan kebutuhan proyek. Implementasi, pengujian aplikasi, verifikasi hasil, dan pengambilan keputusan akhir tetap dilakukan oleh saya. Dengan demikian, AI berperan sebagai pendukung proses pembelajaran dan pemecahan masalah, sedangkan hasil akhir proyek tetap merupakan hasil pengembangan dan keputusan saya.
