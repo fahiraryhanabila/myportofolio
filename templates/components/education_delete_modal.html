@@ -1,12 +1,10 @@
-<p class="experience-status">
-    <button type="button"
-            class="button button-danger"
-            popovertarget="delete-education-{{ education.id }}"
-            aria-label="Hapus {{ education.title }}"
-            title="Hapus proyek">
-        Hapus Riwayat Pendidikan
-    </button>
-</p>
+<button type="button"
+        class="button button-danger button-danger-sm"
+        popovertarget="delete-education-{{ education.id }}"
+        aria-label="Hapus {{ education.title }}"
+        title="Hapus proyek">
+    Hapus Riwayat Pendidikan
+</button>
 <div id="delete-education-{{ education.id }}"
      class="education-delete-modal"
      popover="auto"

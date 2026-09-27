@@ -93,7 +93,13 @@ h1, .brand, .skills-title, .skills-column-title {
     text-decoration: none;
     font-size: 0.95rem;
 }
-
+.site-header nav a,
+.site-header nav button {
+    display: inline-flex;
+    align-items: center;
+    height: 100%;
+    line-height: 1.2;
+}
 .hero {
     padding: 6rem 0 6rem;
     background-image: url('/static/img/hero-fahira.png');
@@ -697,6 +703,7 @@ h1, .brand, .skills-title, .skills-column-title {
     flex-wrap: wrap;
     gap: 0.4rem;
     justify-content: flex-start;
+    margin-bottom: 1rem;
 }
 
 /* education header, search, delete modal */
@@ -817,6 +824,15 @@ h1, .brand, .skills-title, .skills-column-title {
 
 .button-danger {
     background: #b42318;
+}
+
+/* Tombol trigger "Hapus Riwayat Pendidikan" dibuat lebih kecil & jaraknya dirapatkan */
+.button-danger-sm {
+    display: inline-flex;
+    margin-top: 0.5rem;
+    height: auto;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
 }
 
 @media (max-width: 600px) {
@@ -1058,13 +1074,20 @@ h1, .brand, .skills-title, .skills-column-title {
     border-color: var(--accent);
 }
 
-.experience-actions {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
+/* Footer tunggal untuk Star + Edit + Hapus, dipakai sama rata */
+/* untuk semua role (admin/editor/user) supaya posisinya konsisten */
+.card-footer {
     margin-top: auto;
-    margin-bottom: 1rem;
+    padding-top: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.card-footer .button {
+    height: 52px;
+    margin: 0;
 }
 
 .experience-delete-modal {
@@ -1135,38 +1158,86 @@ h1, .brand, .skills-title, .skills-column-title {
     margin-top: 1.5rem;
 }
 
-.experience-actions .button {
-    height: 52px;
-    margin: 0;
-}
-
 .star-form {
-    display: inline;
-}
-
-.button-star {
     display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: var(--ink);
-}
-
-.button-star.is-starred {
-    background: var(--accent);
-}
-
-.star-count {
-    padding: 0.05rem 0.4rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.25);
-    font-size: 0.8rem;
+    margin: 0;
 }
 
 .button-star {
     display: inline-flex !important;
     align-items: center;
+    justify-content: center;
     gap: 0.4rem;
+
+    height: 52px;
+    padding: 0.65rem 1rem;
+
+    background: var(--paper);
+    color: var(--ink);
+
+    border: 1.5px solid transparent;
+    border-radius: var(--radius);
+
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+/* Star di Experience */
+.experience-card .button-star {
+    background: var(--paper);
+    color: var(--accent-dark);
+}
+
+/* Star di Education */
+.timeline-card .button-star {
     background: var(--ink);
+    color: var(--paper);
+}
+
+/* Saat sudah diberi star */
+.button-star.is-starred {
+    background: var(--accent);
+    color: var(--paper);
+    border: none;
+}
+
+/* Simbol ★ */
+.button-star > span:first-child {
+    font-size: 1.05rem;
+    line-height: 1;
+}
+
+/* Tulisan Star / Unstar */
+.button-star .star-label {
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: inherit;
+    line-height: 1;
+}
+
+/* Angka jumlah star */
+.button-star .star-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 22px;
+    height: 22px;
+    padding: 0 0.35rem;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.25);
+    color: inherit;
+
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1;
 }
 
 @media (max-width: 600px) {
