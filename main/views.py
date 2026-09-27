@@ -98,8 +98,19 @@ def get_education_json(request):
         education = education.filter(title__icontains=title_query)
 
     education_json = serializers.serialize(
-        "json", education, use_natural_foreign_keys=True
-    )
+    "json",
+    education,
+    fields=[
+        "title",
+        "is_ongoing",
+        "start_year",
+        "description",
+        "end_year",
+        "category_edu",
+        "skills",
+        "thumbnail",
+    ],
+)
     return HttpResponse(education_json, content_type="application/json")
 
 
@@ -120,7 +131,7 @@ def delete_education(request, education_id):
 
 @login_required(login_url="/login/")
 def edit_education(request, education_id):
-    if not request.user.is_superuser:
+    if not request.user.has_perm("main.change_education"):
         raise PermissionDenied
 
     education = get_object_or_404(Education, pk=education_id)
@@ -132,7 +143,7 @@ def edit_education(request, education_id):
         return redirect("main:show_education")
 
     context = {
-        "name": "Fahira",
+        "name": "Fahira Ryhanabila",
         "form": form,
     }
     return render(request, "education_form.html", context)
@@ -165,8 +176,17 @@ def get_experience_json(request):
         experience = experience.filter(title__icontains=title_query)
 
     experience_json = serializers.serialize(
-        "json", experience, use_natural_foreign_keys=True
-    )
+    "json",
+    experience,
+    fields=[
+        "title",
+        "description",
+        "category",
+        "thumbnail",
+        "started_at",
+        "ended_at",
+    ],
+)
     return HttpResponse(experience_json, content_type="application/json")
 
 
@@ -179,7 +199,7 @@ def delete_experience(request, experience_id):
 
     if request.method == "POST":
         experience.delete()
-        messages.success(request, "Riwayat experience berhasil ditambahkan!")
+        messages.success(request, "Riwayat experience berhasil dihapus!")
         return redirect("main:show_experience")
 
     return redirect("main:show_experience")
@@ -187,7 +207,7 @@ def delete_experience(request, experience_id):
 
 @login_required(login_url="/login/")
 def edit_experience(request, experience_id):
-    if not request.user.is_superuser:
+    if not request.user.has_perm("main.change_experience"):
         raise PermissionDenied
 
     experience = get_object_or_404(Experience, pk=experience_id)
@@ -195,7 +215,7 @@ def edit_experience(request, experience_id):
 
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, "Riwayat pengalaman berhasil diperbarui!")
+        messages.success(request, "Riwayat experience berhasil diperbarui!")
         return redirect("main:show_experience")
 
     context = {
@@ -278,7 +298,7 @@ def seeder_data(request):
         defaults={
             "description": "Managed the Open House Fasilkom UI Ambassador program, including candidate selection, organizing supporting events and the farewell party, and monitoring ambassador performance in producing promotional content.",
             "category": "part-time",
-            "ended_at": "2025",
+            "ended_at": "2025-12-31",
             "thumbnail": "/static/img/ambass-photo.jpeg",
         }
     )
@@ -288,7 +308,7 @@ def seeder_data(request):
         defaults={
             "description": "Served as the main communication bridge between BETIS Fasilkom UI and high school students, managed BETIS's content and social media accounts, drafted broadcast announcements, and disseminated registration information.",
             "category": "part-time",
-            "ended_at": "2025",
+            "ended_at": "2025-12-31",
             "thumbnail": "/static/img/betis-photo.jpeg",
         }
     )
