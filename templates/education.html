@@ -68,10 +68,17 @@
                                             {% endfor %}
                                         </div>
                                     {% endif %}
-                                    
-                                    {% if user.is_authenticated %}
+
+                                    <div class="card-footer">
                                         {% include "components/education_star.html" with education=education %}
-                                    {% endif %}
+
+                                        {% if user.is_superuser or perms.main.change_education %}
+                                            <a href="{% url 'main:edit_education' education.id %}"
+                                            class="button">
+                                                Edit
+                                            </a>
+                                        {% endif %}
+                                    </div>
 
                                     {% if user.is_superuser %}
                                         {% include "components/education_delete_modal.html" with education=education %}
