@@ -3,7 +3,8 @@ from django.urls import path
 from main.views import (show_main, show_experience, show_education, seeder_data, 
                         create_education, get_education_json, edit_education, delete_education, 
                         create_experience, get_experience_json, delete_experience, edit_experience,
-                        register, login_user, star_experience, star_education, logout_user)
+                        register, login_user, star_experience, star_education, logout_user,
+                        create_experience_ajax)
 
 app_name = "main"
 
@@ -29,4 +30,5 @@ urlpatterns = [
     path("experience/<uuid:experience_id>/star/", star_experience, name="star_experience"),
     path("education/<int:education_id>/star/", star_education, name="star_education"),
     
+    path("experience/add-ajax/", create_experience_ajax, name="create_experience_ajax"),
 ]
