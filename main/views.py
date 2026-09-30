@@ -19,6 +19,8 @@ from django.shortcuts import redirect, render
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 
 def show_main(request):
@@ -38,18 +40,11 @@ def show_main(request):
 
 
 def show_experience(request):
-    json_response = get_experience_json(request)
-
-    experience = serializers.deserialize(
-        "json",
-        json_response.content.decode("utf-8"),
-    )
-    experience = [item.object for item in experience]
     title_query = request.GET.get("title", "").strip()
     context = {
         "name": "Fahira",
-        "experience_list": experience,
         "title_query": title_query,
+        "form": ExperienceForm(),
     }
     return render(request, "experience.html", context)
 
@@ -170,24 +165,34 @@ def create_experience(request):
 
 def get_experience_json(request):
     title_query = request.GET.get("title", "").strip()
-    experience = Experience.objects.all()
+    experience = Experience.objects.prefetch_related('starred_by').all()
 
     if title_query:
         experience = experience.filter(title__icontains=title_query)
+    
+    # Konstruksi data JSON secara manual agar bisa menyisipkan logika Star
+    data = []
+    for item in experience:
+        starred_users = item.starred_by.all()
+        is_starred = request.user in starred_users if request.user.is_authenticated else False
+        starred_by_names = ", ".join([u.username for u in starred_users])
 
-    experience_json = serializers.serialize(
-    "json",
-    experience,
-    fields=[
-        "title",
-        "description",
-        "category",
-        "thumbnail",
-        "started_at",
-        "ended_at",
-    ],
-)
-    return HttpResponse(experience_json, content_type="application/json")
+        data.append({
+            "pk": str(item.id),
+            "fields": {
+                "title": item.title,
+                "description": item.description,
+                "category": item.category,
+                "category_display": item.get_category_display(),
+                "thumbnail": item.thumbnail,
+                "started_at": item.started_at.isoformat() if item.started_at else None,
+                "ended_at": item.ended_at.isoformat() if item.ended_at else None,
+                "star_count": len(starred_users),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            }
+        })
+    return JsonResponse(data, safe=False)
 
 
 @login_required(login_url="/login/")
@@ -252,7 +257,23 @@ def star_education(request, education_id):
 
     return redirect("main:show_education")
 
+@require_POST
+def create_experience_ajax(request):
+    if not request.user.is_superuser:
+        return JsonResponse(
+            {"message": "Hanya pemilik portofolio yang dapat menambahkan proyek."},
+            status=403,
+        )
 
+    form = ExperienceForm(request.POST)
+    if form.is_valid():
+        experience = form.save()
+        return JsonResponse(
+            {"message": "Proyek berhasil ditambahkan.", "pk": str(experience.id)},
+            status=201,
+        )
+
+    return JsonResponse({"errors": form.errors.get_json_data()}, status=400)
 def register(request):
     form = UserCreationForm(request.POST or None)
 
