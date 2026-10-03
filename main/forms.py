@@ -1,10 +1,37 @@
-from django.forms import ModelForm, TextInput, Textarea, NumberInput, URLInput, CheckboxInput, Select
-
-from main.models import Education
-from main.models import Experience
-
 from django.core.exceptions import ValidationError
+from django.forms import (
+    CheckboxInput,
+    DateTimeInput,
+    ModelForm,
+    NumberInput,
+    Select,
+    Textarea,
+    TextInput,
+    URLInput,
+)
 from django.utils.html import strip_tags
+
+from main.models import Education, Experience
+
+
+def clean_text(value, field_label, required=True):
+    cleaned = strip_tags(value or "").strip()
+    if required and not cleaned:
+        raise ValidationError(f"{field_label} tidak boleh hanya berisi tag HTML.")
+    return cleaned
+
+
+def clean_thumbnail_url(value):
+    thumbnail = (value or "").strip()
+    if not thumbnail:
+        return thumbnail
+    lowered = thumbnail.lower()
+    if thumbnail.startswith("//"):
+        raise ValidationError("URL thumbnail tidak valid.")
+    if not (thumbnail.startswith("/") or lowered.startswith(("http://", "https://"))):
+        raise ValidationError("URL thumbnail harus diawali http://, https://, atau /.")
+    return thumbnail
+
 
 class EducationForm(ModelForm):
     class Meta:
@@ -47,19 +74,13 @@ class EducationForm(ModelForm):
             ),
             "is_ongoing": CheckboxInput(),
             "start_year": NumberInput(
-                attrs={
-                    "placeholder": "Masukkan tahun mulai pendidikan",
-                }
+                attrs={"placeholder": "Masukkan tahun mulai pendidikan"}
             ),
             "end_year": NumberInput(
-                attrs={
-                    "placeholder": "Masukkan tahun selesai pendidikan",
-                }
+                attrs={"placeholder": "Masukkan tahun selesai pendidikan"}
             ),
             "skills": TextInput(
-                attrs={
-                    "placeholder": "Masukkan skills yang kamu dapatkan",
-                }
+                attrs={"placeholder": "Masukkan skills yang kamu dapatkan"}
             ),
             "thumbnail": URLInput(
                 attrs={
@@ -68,7 +89,18 @@ class EducationForm(ModelForm):
             ),
         }
 
-from django.forms import ModelForm, TextInput, Textarea, URLInput, Select, DateTimeInput
+    def clean_title(self):
+        return clean_text(self.cleaned_data["title"], "Nama institusi/jenjang")
+
+    def clean_description(self):
+        return clean_text(self.cleaned_data["description"], "Deskripsi")
+
+    def clean_skills(self):
+        return clean_text(self.cleaned_data.get("skills", ""), "Skills", required=False)
+
+    def clean_thumbnail(self):
+        return clean_thumbnail_url(self.cleaned_data.get("thumbnail"))
+
 
 class ExperienceForm(ModelForm):
     class Meta:
@@ -97,8 +129,8 @@ class ExperienceForm(ModelForm):
                 attrs={"placeholder": "Ceritakan pengalamanmu", "rows": 3}
             ),
             "category": Select(),
-            "thumbnail": URLInput(
-                attrs={"placeholder": "https://drive.google.com/thumbnail?id=...&sz=w1000"}
+            "thumbnail": TextInput(
+                attrs={"placeholder": "https://... atau /static/img/foto.jpeg"}
             ),
             "ended_at": DateTimeInput(
                 attrs={
@@ -108,12 +140,12 @@ class ExperienceForm(ModelForm):
                 format="%Y-%m-%dT%H:%M",
             ),
         }
-        
+
     def clean_title(self):
-        title = strip_tags(self.cleaned_data["title"]).strip()
-        if not title:
-            raise ValidationError("Judul experience tidak boleh hanya berisi tag HTML.")
-        return title
+        return clean_text(self.cleaned_data["title"], "Judul experience")
 
     def clean_description(self):
-        return strip_tags(self.cleaned_data["description"]).strip()
+        return clean_text(self.cleaned_data["description"], "Deskripsi")
+
+    def clean_thumbnail(self):
+        return clean_thumbnail_url(self.cleaned_data.get("thumbnail"))
