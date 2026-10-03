@@ -19,7 +19,7 @@ class Experience(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     category = models.CharField(max_length=20, choices=EXPERIENCE_CHOICES, default='full-time')
-    thumbnail = models.URLField(blank=True, null=True)
+    thumbnail = models.CharField(max_length=500, blank=True, null=True)
     starred_by = models.ManyToManyField(
         User, related_name="starred_experiences", blank=True
     )
