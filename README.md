@@ -11,9 +11,11 @@ Konten pada halaman portofolio ini meliputi:
 - **About Me Section**: Perkenalan singkat mengenai diri.
 - **Interactive Skills Section**: Tata letak 2 kolom (Hard Skills & Soft Skills) berbentuk kartu (*card*) yang dapat diklik untuk efek "terangkat" (*is-raised*), serta menampilkan deskripsi tambahan saat *hover*.
 - **Autentikasi & Otorisasi Pengguna**: Pengunjung dapat melakukan Register, Login, dan Logout menggunakan sistem autentikasi bawaan Django, dengan status login di navbar dan waktu login terakhir tercatat melalui cookie. Hak akses dibagi menjadi empat peran: pengunjung (hanya baca), pengguna terdaftar (baca & star), editor (dapat mengubah data dan melakukan role user), dan superuser (akses penuh).
-- **Experience Page**: Menampilkan riwayat pengalaman kepanitiaan, organisasi, dan volunteer dalam bentuk kartu berisi kategori, status keberlangsungan, dan gambar pendukung. Dilengkapi fitur pencarian, *star*/*unstar*, serta tambah/ubah/hapus data sesuai hak akses peran.
-- **Education Page**: Menampilkan riwayat pendidikan dalam format *timeline*, mencakup jenjang, tahun, deskripsi, dan daftar *skill* yang diperoleh. Dilengkapi fitur pencarian, *star*/*unstar*, serta tambah/ubah/hapus data sesuai hak akses peran.
-- **Form & Data Delivery**: Data Experience dan Education dikelola lewat `ModelForm` Django dengan validasi otomatis dan proteksi CSRF. Data juga tersedia dalam format JSON melalui endpoint `/api/experience/` dan `/api/education/` yang mendukung pencarian berdasarkan judul.
+- **Experience Page**: Menampilkan riwayat pengalaman kepanitiaan, organisasi, dan volunteer dalam bentuk kartu berisi kategori, status keberlangsungan, dan gambar pendukung. Data dimuat secara asinkron lewat AJAX (`fetch()`) dengan indikator *loading*, tampilan data kosong, dan tampilan error. Dilengkapi pencarian *real-time* dengan *debouncing*, *star*/*unstar* (pengunjung yang belum login diarahkan ke halaman login), serta tambah data melalui modal tanpa *reload* halaman. Ubah dan hapus data tersedia sesuai hak akses peran.
+- **Education Page**: Menampilkan riwayat pendidikan dalam format *timeline*, mencakup jenjang, tahun, deskripsi, dan daftar *skill* yang diperoleh. Data dimuat secara asinkron lewat AJAX dengan indikator *loading*, tampilan data kosong, dan tampilan error. Dilengkapi pencarian *real-time* dengan *debouncing*, *star*/*unstar* (pengunjung yang belum login diarahkan ke halaman login), serta tambah data melalui modal tanpa *reload* halaman. Ubah dan hapus data tersedia sesuai hak akses peran.
+- **Form & Data Delivery**: Data Experience dan Education dikelola lewat `ModelForm` Django dengan validasi otomatis dan proteksi CSRF. Endpoint JSON `/api/experience/` dan `/api/education/` menyusun respons secara manual dengan `JsonResponse`, termasuk jumlah *star* dan status *star* pengguna yang sedang login, serta mendukung pencarian berdasarkan judul. Penambahan data lewat AJAX memakai view `POST` yang memeriksa hak akses di sisi server dan membalas JSON dengan status HTTP yang sesuai (201, 400, 403), dengan token CSRF dikirim lewat header `X-CSRFToken`.
+- **Notifikasi Toast**: Komponen toast yang dapat dipakai ulang (berbasis Popover API) menampilkan umpan balik saat data berhasil ditambahkan maupun saat gagal, termasuk pesan kesalahan validasi dari server.
+- **Keamanan Input (Perlindungan XSS)**: Setiap nilai teks yang disisipkan ke HTML lewat JavaScript di-*escape* dengan `escapeHtml`, sedangkan input di sisi server dibersihkan dengan `strip_tags` pada method `clean_<field>` di `ModelForm` serta validasi URL gambar yang menolak skema berbahaya seperti `javascript:`.
 - **Responsive Layout**: Tata letak menyesuaikan otomatis antara tampilan desktop dan mobile menggunakan CSS Grid, Flexbox, `clamp()` untuk ukuran font, dan `@media` *query* untuk perubahan susunan elemen.
 
 ## Cara Menjalankan Proyek Secara Lokal
@@ -194,7 +196,7 @@ Sebagai contoh, ketika AI memberikan saran mengenai struktur komponen dan implem
 ### Tugas 3
 1. Alasan mengapa menggunakan ModelForm dibanding menggunakan form HTML manual antara lain:
     - Django dapat secara otomatis men-generate field form, tipe data, dan validasi langsung dari struktur model.
-    - Mengurangi duplikasi kode, terutama untuk Constraint yang banyak dipakai di beberapa file tanpa menulis ulang di HTML.
+    - Mengurangi duplikasi kode, terutama untuk constraint yang banyak dipakai di beberapa file tanpa menulis ulang di HTML.
     - Melakukan validasi tipe data secara otomatis dan cukup dengan memanggil form.save() untuk menyimpan data ke database.
     - Jika model suatu saat berubah, form akan menyesuaikan secara otomatis tanpa merombak kode HTML dari nol.
     - ModelForm dapat membuat proses CRUD menjadi lebih sederhana melalui form.save() yang berfungsi untuk membuat data baru maupun mengubah data yang sudah ada.
@@ -332,3 +334,59 @@ Membantu mengevaluasi perbedaan warna tombol Star pada bagian Education dan Expe
 
 ### **5. Evaluasi Kritis terhadap Penggunaan AI**
 AI digunakan dalam membantu pemahaman terkait konsep role, permission, *server-side authorization*, HTTP 403 Forbidden, serta keamanan CSRF pada form Star/Unstar. Setiap saran dari AI tetap saya sesuaikan dengan kondisi dan kebutuhan proyek. Implementasi, pengujian aplikasi, verifikasi hasil, dan pengambilan keputusan akhir tetap dilakukan oleh saya. Dengan demikian, AI berperan sebagai pendukung proses pembelajaran dan pemecahan masalah, sedangkan hasil akhir proyek tetap merupakan hasil pengembangan dan keputusan saya.
+
+### Tugas 5
+1. *Debouncing* merupakan teknik untuk menunda eksekusi suatu fungsi sampai tidak ada event baru selama jangka waktu tertentu. Fitur ini berguna agar browser tidak langsung mengirim request AJAX setiap kali pengguna mengetik satu karakter. Teknik ini penting diterapkan pada fitur pencarian yang menggunakan AJAX untuk mengurangi request yang tidak perlu ke server sekaligus membuat pencarian tetap terasa responsif.
+2. ``await`` pada ``fetch()`` berfungsi untuk menunggu sampai proses pengambilan data dari server selesai sebelum menjalankan kode berikutnya. ``fetch()`` sendiri bersifat *asynchronous* dan menghasilkan ``Promise``. Jika ``await`` tidak digunakan, program tidak menunggu proses tersebut selesai sehingga baris berikutnya langsung dijalankan, dan hasil dari ``fetch()`` yang diperoleh masih berupa ``Promise``, bukan respons dari server.
+3. XSS (Cross-Site Scripting) adalah suatu serangan yang dilakukan dengan cara menyisipkan kode JavaScript berbahaya ke dalam halaman web sehingga dapat dijalankan oleh pengguna lain. Pada Django, *auto-escaping* digunakan dalam perlindungan data sehingga karakter ``<`` dan ``>`` tidak langsung dianggap sebagai tag HTML. Namun apabila menggunakan AJAX, data JSON dapat dimasukkan langsung ke HTML melalui JavaScript, sehingga *auto-escaping* Django tidak berlaku. Akibatnya jika terdapat data yang mengandung kode berbahaya, kode tersebut dapat dijalankan oleh browser, sehingga data dari AJAX perlu di-*escape* terlebih dahulu sebelum ditampilkan.
+
+### **AI Disclosure Tugas 5**
+AI digunakan dalam proyek ini sebagai sarana pendukung dalam memahami konsep penggunaan ``fetch()``, penanganan HTTP response, ``response.ok``, ``await``, *debouncing*, dan ``AbortController``. Keputusan dan implementasi akhir tetap dilakukan oleh saya berdasarkan kebutuhan dan kondisi proyek.
+
+### **1. Alat AI yang Digunakan**
+* **ChatGPT** (Model Bahasa / AI Assistant)
+
+### **2. Ruang Lingkup Bantuan AI**
+* **``fetch()`` dan ``response.ok``**:  Membantu memahami mengapa response dengan status HTTP seperti 403 tidak otomatis menyebabkan ``fetch()`` masuk ke ``catch()``, serta memahami fungsi ``response.ok``.
+* **``await`` pada ``fetch()``**: Membantu memahami fungsi ``await`` ketika digunakan bersama ``fetch()``.
+* **Debouncing**: Membantu memahami cara kerja *debouncing* dan alasan penggunaannya pada fitur pencarian.
+* **AbortController**: Membantu memahami fungsi ``AbortController`` dalam membatalkan request ``fetch()`` yang sedang berjalan serta perbedaannya dengan *debouncing*.
+* **Debugging**: Membantu mengidentifikasi penyebab error berdasarkan hasil yang muncul setelah implementasi dijalankan.
+
+### **3. Strategi *Prompting***
+* **Problem-Based Questioning**: Mengajukan pertanyaan mengenai perilaku ``fetch()`` ketika menerima HTTP response seperti 403 serta fungsi ``response.ok``.
+* **Conceptual Follow-up**: Mengajukan pertanyaan lanjutan untuk memahami cara kerja ``await``, *debouncing*, dan ``AbortController``.
+* **Comparative Prompting**: Membandingkan fungsi *debouncing* dengan ``Abort Controller`` untuk memahami perbedaan fungsi keduanya dalam proses request.
+* **Verification Prompting**: Menggunakan penjelasan AI untuk memeriksa pemahaman terhadap alur ``fetch()``, ``catch()``, *debouncing*, dan pembatalan request.
+
+### **4. Log *Prompting* AI**
+Penggunaan AI dalam Tugas 5 didokumentasikan untuk menunjukkan bagian-bagian proses pengembangan yang mendapatkan bantuan AI.
+
+**Format Log:** `[ID] / [Tugas] - [Deskripsi Penggunaan AI]: [Link ke Chat]`
+
+Keterangan:
+- **ID** = nomor urut interaksi AI.
+- **Tugas** = nomor tugas/tutorial yang dikerjakan.
+- **Deskripsi Penggunaan AI** = ringkasan tujuan atau topik bantuan AI.
+- **Link ke Chat** = tautan menuju percakapan AI yang digunakan
+
+**001 / Tugas 5 - Memahami ``fetch()`` dan HTTP error**: https://chatgpt.com/share/6ac35d6c-4948-83ec-a928-b283d5cf67ed
+Membantu memahami mengapa  ``fetch()`` tidak otomatis masuk ke ``catch()`` ketika server mengembalikan status HTTP seperti 403, serta memahami fungsi ``response.ok`` dalam mengecek keberhasilan HTTP response.
+
+**002 / Tugas 5 - Memahami penggunaan ``await`` pada ``fetch()``**: https://chatgpt.com/share/6ac35d6c-4948-83ec-a928-b283d5cf67ed
+Membantu memahami fungsi ``await`` ketika digunakan bersama ``fetch()`` serta apa yang terjadi apabila ``await`` tidak digunakan.
+
+**003 / Tugas 5 - Memahami cara kerja debouncing**:https://chatgpt.com/share/6ac35d6c-4948-83ec-a928-b283d5cf67ed
+Membantu memahami cara kerja *debouncing*, terutama penggunaan ``clearTimeout()`` dan ``setTimeout()`` untuk menunggu hingga pengguna berhenti mengetik sebelum menjalankan request.
+
+**004 / Tugas 5 - Memahami fungsi ``AbortController``**: https://chatgpt.com/share/6ac35d6c-4948-83ec-a928-b283d5cf67ed
+Membantu memahami fungsi ``AbortController`` untuk membatalkan request ``fetch()`` yang masih berjalan serta cara penggunaannya bersama ``signal``.
+
+**005 / Tugas 5 - Perbedaan debouncing dan ``AbortController``**: https://chatgpt.com/share/6ac35d6c-4948-83ec-a928-b283d5cf67ed
+Membantu memahami perbedaan fungsi *debouncing* dan ``AbortController``, yaitu *debouncing* untuk mengatur kapan request dikirim, sedangkan ``AbortController`` untuk membatalkan request yang sudah terlanjur dikirim.
+
+**006 / Tugas 5 - Identifikasi error setelah menjalankan implementasi**: https://chatgpt.com/share/6ac35d6c-4948-83ec-a928-b283d5cf67ed
+Mengirimkan hasil atau kondisi error yang muncul setelah menjalankan implementasi untuk membantu mengidentifikasi bagian yang menyebabkan error dan memahami penyebabnya.
+
+### **5. Evaluasi Kritis terhadap Penggunaan AI**
+AI digunakan untuk membantu memahami konsep ``fetch()``, ``response.ok``, ``await``, *debouncing*, dan ``AbortController``serta membantu mengidentifikasi penyebab error yang muncul saat implementasi dijalankan. Penjelasan dari AI digunakan sebagai bahan untuk memahami konsep, mengevaluasi permasalahan, dan memeriksa pemahaman terhadap implementasi yang digunakan.
