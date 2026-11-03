@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -83,6 +84,7 @@ WHITENOISE_USE_FINDERS = True
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "fahira-ryhanabila-myportofolio.pws.cs.ui.ac.id"]
 # gunakan https:// untuk trailing urlnya
 CSRF_TRUSTED_ORIGINS = ["https://fahira-ryhanabila-myportofolio.pws.cs.ui.ac.id"]
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Database
