@@ -10,13 +10,32 @@ Konten pada halaman portofolio ini meliputi:
 - **Credentials Section**: Menampilkan logo dan nama kepanitiaan yang pernah diikuti (Open House Fasilkom UI 2025, BETIS Fasilkom UI, COMPFEST 18, FUKI Fasilkom UI) dalam tata letak sejajar.
 - **About Me Section**: Perkenalan singkat mengenai diri.
 - **Interactive Skills Section**: Tata letak 2 kolom (Hard Skills & Soft Skills) berbentuk kartu (*card*) yang dapat diklik untuk efek "terangkat" (*is-raised*), serta menampilkan deskripsi tambahan saat *hover*.
-- **Autentikasi & Otorisasi Pengguna**: Pengunjung dapat melakukan Register, Login, dan Logout menggunakan sistem autentikasi bawaan Django, dengan status login di navbar dan waktu login terakhir tercatat melalui cookie. Hak akses dibagi menjadi empat peran: pengunjung (hanya baca), pengguna terdaftar (baca & star), editor (dapat mengubah data dan melakukan role user), dan superuser (akses penuh).
-- **Experience Page**: Menampilkan riwayat pengalaman kepanitiaan, organisasi, dan volunteer dalam bentuk kartu berisi kategori, status keberlangsungan, dan gambar pendukung. Data dimuat secara asinkron lewat AJAX (`fetch()`) dengan indikator *loading*, tampilan data kosong, dan tampilan error. Dilengkapi pencarian *real-time* dengan *debouncing*, *star*/*unstar* (pengunjung yang belum login diarahkan ke halaman login), serta tambah data melalui modal tanpa *reload* halaman. Ubah dan hapus data tersedia sesuai hak akses peran.
-- **Education Page**: Menampilkan riwayat pendidikan dalam format *timeline*, mencakup jenjang, tahun, deskripsi, dan daftar *skill* yang diperoleh. Data dimuat secara asinkron lewat AJAX dengan indikator *loading*, tampilan data kosong, dan tampilan error. Dilengkapi pencarian *real-time* dengan *debouncing*, *star*/*unstar* (pengunjung yang belum login diarahkan ke halaman login), serta tambah data melalui modal tanpa *reload* halaman. Ubah dan hapus data tersedia sesuai hak akses peran.
-- **Form & Data Delivery**: Data Experience dan Education dikelola lewat `ModelForm` Django dengan validasi otomatis dan proteksi CSRF. Endpoint JSON `/api/experience/` dan `/api/education/` menyusun respons secara manual dengan `JsonResponse`, termasuk jumlah *star* dan status *star* pengguna yang sedang login, serta mendukung pencarian berdasarkan judul. Penambahan data lewat AJAX memakai view `POST` yang memeriksa hak akses di sisi server dan membalas JSON dengan status HTTP yang sesuai (201, 400, 403), dengan token CSRF dikirim lewat header `X-CSRFToken`.
+- **Autentikasi & Otorisasi Pengguna**: Pengunjung dapat melakukan Register, Login, dan Logout menggunakan sistem autentikasi bawaan Django, dengan status login di navbar dan waktu login terakhir tercatat melalui cookie. Hak akses dibagi menjadi empat peran: pengunjung (hanya membaca), pengguna terdaftar (membaca dan memberi star), editor (membaca, memberi star, dan mengubah data lewat `PUT`/`PATCH`, tetapi tidak dapat membuat atau menghapus), dan superuser/pemilik portofolio (akses penuh). Aturan yang sama berlaku di halaman maupun di API.
+- **Experience Page**: Menampilkan riwayat pengalaman kepanitiaan, organisasi, dan volunteer dalam bentuk kartu berisi kategori, status keberlangsungan, dan gambar pendukung. Data dimuat secara asinkron dari REST API (`/api/v1/experiences/`) lewat `fetch()` dengan indikator *loading*, tampilan data kosong, dan tampilan error. Dilengkapi pencarian *real-time* dengan *debouncing*, *star*/*unstar* (pengunjung yang belum login diarahkan ke halaman login), serta tambah, ubah, dan hapus data tanpa *reload* halaman sesuai hak akses peran.
+- **Education Page**: Menampilkan riwayat pendidikan dalam format *timeline*, mencakup jenjang, tahun, deskripsi, dan daftar *skill* yang diperoleh. Data dimuat secara asinkron dari REST API (`/api/v1/education/`) dengan indikator *loading*, tampilan data kosong, dan tampilan error. Dilengkapi pencarian *real-time* dengan *debouncing*, *star*/*unstar*, serta tambah data lewat modal, ubah data lewat modal edit (`PUT`), dan hapus data tanpa *reload* halaman sesuai hak akses peran.
+- **Form & Data Delivery**: Form HTML dikelola lewat `ModelForm` Django dengan validasi dan proteksi CSRF. Data untuk halaman Experience dan Education disajikan lewat REST API (lihat bagian *REST API*). Endpoint JSON lama `/api/experience/` dan `/api/education/` (dirakit manual dengan `JsonResponse`) serta halaman edit lama tetap dipertahankan.
 - **Notifikasi Toast**: Komponen toast yang dapat dipakai ulang (berbasis Popover API) menampilkan umpan balik saat data berhasil ditambahkan maupun saat gagal, termasuk pesan kesalahan validasi dari server.
-- **Keamanan Input (Perlindungan XSS)**: Setiap nilai teks yang disisipkan ke HTML lewat JavaScript di-*escape* dengan `escapeHtml`, sedangkan input di sisi server dibersihkan dengan `strip_tags` pada method `clean_<field>` di `ModelForm` serta validasi URL gambar yang menolak skema berbahaya seperti `javascript:`.
+- **Keamanan Input (Perlindungan XSS & CSRF)**: Setiap nilai teks yang disisipkan ke HTML lewat JavaScript di-*escape* dengan `escapeHtml`. Di sisi server, input dibersihkan dengan `strip_tags` pada `clean_<field>` (`ModelForm`) dan `validate_<field>` (serializer), serta validasi URL gambar yang menolak skema berbahaya seperti `javascript:`. Setiap request yang mengubah data menyertakan header `X-CSRFToken`.
 - **Responsive Layout**: Tata letak menyesuaikan otomatis antara tampilan desktop dan mobile menggunakan CSS Grid, Flexbox, `clamp()` untuk ukuran font, dan `@media` *query* untuk perubahan susunan elemen.
+
+## REST API
+API dibangun dengan Django REST Framework, memakai `@api_view` berbasis fungsi dan `SessionAuthentication`, di bawah prefix `/api/v1/`. Browsable API dapat dibuka di alamat endpoint.
+
+| Method | Endpoint | Tindakan | Siapa yang boleh |
+|---|---|---|---|
+| GET | `/api/v1/education/` | Daftar (`?title=...` untuk mencari) | Semua pengunjung |
+| POST | `/api/v1/education/` | Tambah data | Pemilik (superuser) |
+| GET | `/api/v1/education/<id>/` | Detail | Semua pengunjung |
+| PUT / PATCH | `/api/v1/education/<id>/` | Ubah data | Pemilik dan Editor |
+| DELETE | `/api/v1/education/<id>/` | Hapus data | Pemilik |
+| POST | `/api/v1/education/<id>/star/` | Beri/batalkan star | Pengguna login |
+
+Endpoint Experience memakai pola yang sama di `/api/v1/experiences/` dengan ID berupa UUID.
+
+- **Serializer** (`main/serializers.py`) memakai daftar `fields` eksplisit, menyertakan `star_count` dan `is_starred` sebagai field *read-only*, dan tidak menampilkan data akun sensitif.
+- **Permission** (`main/permissions.py`) membatasi akses sesuai empat peran. Izin Editor memakai izin Django `change_<model>`.
+- **Status HTTP**: `201` dibuat, `400` input tidak valid, `403` ditolak, `404` tidak ditemukan, `204` dihapus.
+- **Test** (`main/tests_api.py`) memakai `APITestCase`, mencakup tiap peran, validasi, star, dan pemeriksaan CSRF dengan `APIClient(enforce_csrf_checks=True)`.
 
 ## Cara Menjalankan Proyek Secara Lokal
 1. Unduh salinan repositori ini ke perangkat Anda, kemudian pindah ke direktori proyek:
@@ -75,6 +94,7 @@ Untuk memastikan proyek tetap berjalan dengan baik, beberapa langkah setup perlu
 ## Assets & Credits
 - Ikon menggunakan **[Lucide Icons](https://lucide.dev/)**, dimuat melalui CDN.
 - Font **Poppins** dari [Google Fonts](https://fonts.google.com/specimen/Poppins).
+- API dibangun dengan **[Django REST Framework](https://www.django-rest-framework.org/)**.
 
 ## Progress Tugas Mingguan
 
@@ -390,3 +410,112 @@ Mengirimkan hasil atau kondisi error yang muncul setelah menjalankan implementas
 
 ### **5. Evaluasi Kritis terhadap Penggunaan AI**
 AI digunakan untuk membantu memahami konsep ``fetch()``, ``response.ok``, ``await``, *debouncing*, dan ``AbortController``serta membantu mengidentifikasi penyebab error yang muncul saat implementasi dijalankan. Penjelasan dari AI digunakan sebagai bahan untuk memahami konsep, mengevaluasi permasalahan, dan memeriksa pemahaman terhadap implementasi yang digunakan.
+
+#### Tugas 6
+1. **REST (Representational State Transfer)** adalah gaya arsitektur untuk merancang web API yang mengatur komunikasi antara client dan server. Dalam REST, data diperlakukan sebagai *resource* yang diidentifikasi oleh URL, sedangkan HTTP method menentukan operasi yang dilakukan: `GET` untuk membaca, `POST` untuk menambahkan, `PUT`/`PATCH` untuk memperbarui, dan `DELETE` untuk menghapus. Server tidak menyimpan keadaan client di antara request (*stateless*), dan hasil setiap operasi dinyatakan lewat status code HTTP.
+**Mengapa JSON saja belum cukup.** JSON hanyalah format pertukaran data, bukan aturan dalam merancang API. Sebuah endpoint bisa mengembalikan JSON tetapi tetap tidak RESTful. API disebut RESTful apabila juga mengikuti prinsip REST:
+   - URL berbasis resource (kata benda), bukan perintah.
+   - HTTP method sesuai fungsinya.
+   - Status code yang tepat, misalnya `201` saat data dibuat, `400` untuk input tidak valid, `403` untuk tindakan yang tidak diizinkan, `404` untuk data yang tidak ditemukan, dan `204` setelah data dihapus.
+Sebagai pembanding pada proyek ini:
+   | | Tidak RESTful | RESTful |
+   |---|---|---|
+   | Menghapus data | `POST /education/3/delete/` | `DELETE /api/v1/education/3/` |
+   | Respons sukses | JSON dengan status `200` | Body kosong dengan status `204` |
+
+   Endpoint pertama mengembalikan JSON, tetapi operasi hapus ditulis di URL dan memakai method yang tidak sesuai. Endpoint kedua menyatakan operasinya lewat method dan hasilnya lewat status code.
+
+   **Adapun perbedaan `PUT` dan `PATCH`antara lain:**
+   - `PUT` mengganti **seluruh** data suatu resource, sehingga semua field wajib dikirim. Bila ada field wajib yang tidak dikirim, request ditolak dengan `400`.
+     ```
+     PUT /api/v1/education/3/
+     {"title": "SMA Negeri 1", "description": "IPA", "category_edu": "Senior High School",
+      "start_year": 2020, "end_year": 2023, "is_ongoing": false}
+     ```
+     `PUT` cocok dipakai saat client memegang data lengkap dan ingin menggantinya sekaligus, misalnya form edit yang mengirim semua isian.
+
+   - `PATCH` memperbarui **sebagian** field saja, sedangkan field lain tidak berubah.
+     ```
+     PATCH /api/v1/education/3/
+     {"title": "SMA Negeri 2"}
+     ```
+     `PATCH` cocok dipakai saat hanya satu atau beberapa field yang berubah, misalnya mengganti judul tanpa menyentuh deskripsi dan tahun.
+   Dengan demikian, `PUT` sesuai untuk penggantian data secara keseluruhan, sedangkan `PATCH` lebih sesuai untuk perubahan sebagian.
+
+2. **Serializer** adalah komponen DRF yang menjadi penghubung antara data di aplikasi (objek model Django) dan data yang dipertukarkan lewat API. Serializer bekerja dua arah:
+- **Serialization:** Mengubah objek model menjadi tipe data Python yang dapat dikirim melalui API. Contohnya pada `GET /api/v1/education/`.
+- **Deserialization:** Mengubah input yang dikirim client menjadi data yang sudah divalidasi sebelum disimpan melalui `is_valid()`, dan ``save(()``, misalnya pada `POST`, `PUT`, dan `PATCH`.
+Penggunaan serializer memiliki beberapa kelebihan dibandingkan membuat dictionary secara manual dengan `JsonResponse` seperti pada Tutorial 05:
+- **Lebih praktis:** Struktur data cukup didefinisikan sekali menggunakan `ModelSerializer`, sehingga tidak perlu menyusun dictionary berulang kali.
+- **Validasi dilakukan secara otomatis:** Aturan validasi dapat ditulis langsung di serializer dan digunakan kembali pada berbagai operasi.
+- **Mudah dikelola:** Field yang ditampilkan, bersifat *read-only*, atau membutuhkan perhitungan tambahan dapat diatur dalam satu tempat.
+- **Pesan error lebih konsisten:** DRF dapat mengembalikan pesan kesalahan untuk setiap field jika data tidak valid.
+Dengan demikian, serializer membuat pengelolaan data API lebih ringkas, konsisten, dan mudah dikembangkan dibandingkan menyusun response secara manual menggunakan ``JsonResponse`.
+
+3. **Autentikasi** adalah proses memverifikasi identitas pengguna, yaitu memastikan siapa yang mengirim request. Pada proyek ini, tugas itu dilakukan oleh `SessionAuthentication`, yang membaca sesi login lalu mengisi `request.user`.
+**Otorisasi** adalah proses menentukan apa yang boleh dilakukan oleh pengguna yang sudah dikenali. Pada proyek ini:
+- Tamu dan user biasa hanya bisa membaca.
+- Editor dapat melakukan `PUT` dan `PATCH`.
+- Pemilik (superuser) boleh membuat, mengubah, dan menghapus.
+Hak akses harus diperiksa dengan *permission class* di server, karena menyembunyikan tombol di template hanya mengubah tampilan dan tidak melindungi data. Kode HTML dan JavaScript yang berjalan di browser bisa diubah lewat DevTools, atau dilewati sepenuhnya dengan mengirim request langsung memakai `fetch()`, Postman, atau `curl`.
+Permission class menjalankan `has_permission` sebelum isi view dijalankan, dan menolak request dengan status 403 jika tidak diizinkan. Dengan begitu, data tetap terlindungi. Menyembunyikan tombol tetap berguna untuk kenyamanan pengguna, tetapi hanya sebagai pelengkap.
+
+4. Alasan mengapa token CSRF tetap diperlukan adalah karena `SessionAuthentication` mengenali pengguna melalui *cookie session*, dan browser mengirim cookie ini otomatis pada setiap request ke situs yang sama, termasuk yang dipicu oleh situs lain. Jika pengguna sedang login lalu membuka halaman berbahaya, halaman itu dapat membuat browser mengirim `DELETE /api/v1/education/3/`, dan server menganggapnya sah. Serangan ini disebut *Cross-Site Request Forgery* (CSRF). Karena itu, request yang mengubah data wajib membawa token lewat header `X-CSRFToken` yang cocok dengan cookie `csrftoken`. Situs lain tidak bisa membaca token ini, sehingga request tanpa token yang benar ditolak dengan `403`.
+`force_authenticate` tidak cukup karena `force_authenticate` memasang user langsung ke request tanpa menjalankan `SessionAuthentication`, padahal pemeriksaan CSRF (`enforce_csrf`) ada di dalamnya. `APIClient` juga tidak memeriksa CSRF secara bawaan. Akibatnya, test tetap lulus walaupun perlindungan CSRF rusak, sehingga tidak membuktikan apa pun. Pembuktian yang benar memakai `enforce_csrf_checks=True` dan `.login()`:
+```python
+client = APIClient(enforce_csrf_checks=True)
+client.login(username="owner", password="test-password")
+response = client.post(url, payload, format="json")  
+assert response.status_code == 403
+```
+### **AI Disclosure Tugas 6**
+AI digunakan dalam proyek ini sebagai sarana pendukung dalam memahami konsep Django REST Framework, penggunaan decorator pada API view, struktur pengujian API, serta perbedaan JSON dan prinsip REST. Keputusan dan implementasi akhir tetap dilakukan oleh saya berdasarkan kebutuhan dan kondisi proyek.
+
+### **1. Alat AI yang Digunakan**
+* **ChatGPT** (Model Bahasa / AI Assistant)
+
+### **2. Ruang Lingkup Bantuan AI**
+* **Serializer DRF:** Membantu memahami perbedaan ``read_only_fields`` dan ``SerializerMethodField``, serta penerapan ``SerializerMethodField`` untuk menghitung jumlah star (``star_count``) dan status star pengguna (``is_starred``).
+* **Decorator API View:** Membantu memahami fungsi ``@api_view``, ``@authentication_classes``, dan ``@permission_classes`` dalam mengatur HTTP method, autentikasi, dan hak akses.
+* **Debugging:** Membantu mengidentifikasi penyebab error ``ImproperlyConfigured`` pada ``EducationSerializer`` berdasarkan pesan error yang muncul.
+* **Pengujian API:** Membantu memahami struktur test Education dan Experience dalam satu file ``tests_api.py`` serta cara menjalankan test per file maupun per class.
+* **Konsep REST:** Membantu memahami mengapa JSON hanyalah format data dan API yang mengembalikan JSON belum tentu RESTful.
+
+### **3. Strategi *Prompting***
+* **Conceptual Questioning:** Mengajukan pertanyaan mengenai perbedaan ``read_only_fields`` dan ``SerializerMethodField`` untuk memahami fungsi dan kapan masing-masing digunakan.
+* **Confirmation Prompting:** Menyampaikan pemahaman sendiri, seperti penerapan ``SerializerMethodField`` pada fitur star, untuk memastikan pemahaman tersebut sudah benar.
+* **Code Explanation Prompting:** Mengirimkan potongan kode decorator pada API view untuk meminta penjelasan fungsi setiap bagiannya.
+* **Problem-Based Questioning:** Mengirimkan tangkapan layar error pada ``EducationSerializer`` untuk membantu menemukan penyebabnya.
+* **Clarification Follow-up:** Mengajukan pertanyaan lanjutan ketika bagian tertentu belum dipahami, seperti alasan JSON belum tentu RESTful.
+
+### **4. Log *Prompting* AI**
+Penggunaan AI dalam Tugas 6 didokumentasikan untuk menunjukkan bagian-bagian proses pengembangan yang mendapatkan bantuan AI.
+
+**Format Log:** `[ID] / [Tugas] - [Deskripsi Penggunaan AI]: [Link ke Chat]`
+
+Keterangan:
+- **ID** = nomor urut interaksi AI.
+- **Tugas** = nomor tugas yang dikerjakan.
+- **Deskripsi Penggunaan AI** = ringkasan tujuan atau topik bantuan AI.
+- **Link ke Chat** = tautan menuju percakapan AI yang digunakan
+
+**001 / Tugas 6 - Memahami perbedaan ``read_only_fields`` dan ``SerializerMethodField``**: https://chatgpt.com/share/6af18804-bdac-83ec-891c-8ec0954798ed
+Membantu memahami perbedaan ``read_only_fields``, yang membatasi field model agar tidak bisa diubah lewat request, dengan ``SerializerMethodField``, yang membuat field tambahan dari hasil method Python, serta kapan masing-masing digunakan pada serializer Education.
+
+**002 / Tugas 6 - Menerapkan ``SerializerMethodField`` untuk fitur star**: https://chatgpt.com/share/6af18804-bdac-83ec-891c-8ec0954798ed
+Membantu memahami cara menggunakan ``SerializerMethodField`` untuk menghitung jumlah star (``star_count``) dan mengecek apakah pengguna yang login sudah memberi star (``is_starred``), serta memahami bahwa perubahan star tetap membutuhkan endpoint tersendiri.
+
+**003 / Tugas 6 - Memahami decorator pada API view**: https://chatgpt.com/share/6af18804-bdac-83ec-891c-8ec0954798ed
+Membantu memahami fungsi ``@api_view``, ``@authentication_classes``, dan ``@permission_classes``, yaitu mengatur HTTP method yang diterima, cara autentikasi, dan hak akses, serta memperbaiki penulisan ``permission_classes`` yang seharusnya berupa list.
+
+**004 / Tugas 6 - Identifikasi error ``ImproperlyConfigured`` pada ``EducationSerializer``**: https://chatgpt.com/share/6af18804-bdac-83ec-891c-8ec0954798ed
+Mengirimkan tangkapan layar error "Field name ``idtitle`` is not valid for model ``Education``" untuk membantu mengidentifikasi kemungkinan penyebabnya, yaitu koma yang hilang di daftar ``fields`` sehingga dua string tergabung menjadi satu.
+
+**005 / Tugas 6 - Struktur test untuk Education**: https://chatgpt.com/share/6af18804-bdac-83ec-891c-8ec0954798ed
+Membantu memahami bahwa test Education boleh digabung dengan test Experience dalam satu file ``tests_api.py`` selama berada di app yang sama, dengan memisahkannya per class, serta cara menjalankan test per file maupun per class.
+
+**006 / Tugas 6 - Memahami mengapa JSON belum tentu RESTful**: https://chatgpt.com/share/6af18804-bdac-83ec-891c-8ec0954798ed
+Membantu memahami bahwa JSON hanyalah format data, sedangkan REST adalah cara merancang API berbasis resource dan HTTP method, sehingga API yang mengembalikan JSON belum tentu mengikuti prinsip REST.
+
+### **5. Evaluasi Kritis terhadap Penggunaan AI**
+AI digunakan untuk membantu memahami konsep Django REST Framework, struktur pengujian API, dan prinsip REST, serta mengidentifikasi penyebab error saat implementasi. Setiap saran dari AI saya periksa dan sesuaikan dengan kondisi proyek. Implementasi, pengujian, dan keputusan akhir tetap dilakukan oleh saya, sehingga AI hanya berperan sebagai pendukung proses belajar dan pemecahan masalah.
