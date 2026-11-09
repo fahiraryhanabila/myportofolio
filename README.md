@@ -3,7 +3,7 @@ NPM     : 2506623660
 Class   : PBP E
 
 ## Tentang Proyek
-Sebuah website portofolio personal yang interaktif dan responsif, guna memenuhi tugas individu (*Individual Assignment*) mata kuliah Pemrograman Berbasis Platform (PBP).
+Sebuah website portofolio personal yang interaktif dan responsif, guna memenuhi tugas individu (*Individual Assignment*) mata kuliah Pemrograman Berbasis Platform (PBP). 
 
 Konten pada halaman portofolio ini meliputi:
 - **Hero Section**: Menampilkan identitas utama (nama, program studi, NPM), tagline personal, serta tautan menuju GitHub, LinkedIn, dan Email, dengan latar belakang visual bertema kampus.
@@ -417,34 +417,35 @@ AI digunakan untuk membantu memahami konsep ``fetch()``, ``response.ok``, ``awai
    - URL berbasis resource (kata benda), bukan perintah.
    - HTTP method sesuai fungsinya.
    - Status code yang tepat, misalnya `201` saat data dibuat, `400` untuk input tidak valid, `403` untuk tindakan yang tidak diizinkan, `404` untuk data yang tidak ditemukan, dan `204` setelah data dihapus.
+
 Sebagai pembanding pada proyek ini:
    | | Tidak RESTful | RESTful |
    |---|---|---|
    | Menghapus data | `POST /education/3/delete/` | `DELETE /api/v1/education/3/` |
    | Respons sukses | JSON dengan status `200` | Body kosong dengan status `204` |
 
-   Endpoint pertama mengembalikan JSON, tetapi operasi hapus ditulis di URL dan memakai method yang tidak sesuai. Endpoint kedua menyatakan operasinya lewat method dan hasilnya lewat status code.
+Endpoint pertama mengembalikan JSON, tetapi operasi hapus ditulis di URL dan memakai method yang tidak sesuai. Endpoint kedua menyatakan operasinya lewat method dan hasilnya lewat status code.
 
-   **Adapun perbedaan `PUT` dan `PATCH`antara lain:**
-   - `PUT` mengganti **seluruh** data suatu resource, sehingga semua field wajib dikirim. Bila ada field wajib yang tidak dikirim, request ditolak dengan `400`.
-     ```
-     PUT /api/v1/education/3/
-     {"title": "SMA Negeri 1", "description": "IPA", "category_edu": "Senior High School",
-      "start_year": 2020, "end_year": 2023, "is_ongoing": false}
-     ```
-     `PUT` cocok dipakai saat client memegang data lengkap dan ingin menggantinya sekaligus, misalnya form edit yang mengirim semua isian.
-
-   - `PATCH` memperbarui **sebagian** field saja, sedangkan field lain tidak berubah.
-     ```
-     PATCH /api/v1/education/3/
-     {"title": "SMA Negeri 2"}
-     ```
-     `PATCH` cocok dipakai saat hanya satu atau beberapa field yang berubah, misalnya mengganti judul tanpa menyentuh deskripsi dan tahun.
-   Dengan demikian, `PUT` sesuai untuk penggantian data secara keseluruhan, sedangkan `PATCH` lebih sesuai untuk perubahan sebagian.
+**Adapun perbedaan `PUT` dan `PATCH`antara lain:**
+- `PUT` mengganti **seluruh** data suatu resource, sehingga semua field wajib dikirim. Bila ada field wajib yang tidak dikirim, request ditolak dengan `400`.
+ ```
+PUT /api/v1/education/3/
+{"title": "SMA Negeri 1", "description": "IPA", "category_edu": "Senior High School",
+"start_year": 2020, "end_year": 2023, "is_ongoing": false}
+```
+`PUT` cocok dipakai saat client memegang data lengkap dan ingin menggantinya sekaligus, misalnya form edit yang mengirim semua isian.
+- `PATCH` memperbarui **sebagian** field saja, sedangkan field lain tidak berubah.
+```
+PATCH /api/v1/education/3/
+{"title": "SMA Negeri 2"}
+```
+`PATCH` cocok dipakai saat hanya satu atau beberapa field yang berubah, misalnya mengganti judul tanpa menyentuh deskripsi dan tahun.
+Dengan demikian, `PUT` sesuai untuk penggantian data secara keseluruhan, sedangkan `PATCH` lebih sesuai untuk perubahan sebagian.
 
 2. **Serializer** adalah komponen DRF yang menjadi penghubung antara data di aplikasi (objek model Django) dan data yang dipertukarkan lewat API. Serializer bekerja dua arah:
 - **Serialization:** Mengubah objek model menjadi tipe data Python yang dapat dikirim melalui API. Contohnya pada `GET /api/v1/education/`.
 - **Deserialization:** Mengubah input yang dikirim client menjadi data yang sudah divalidasi sebelum disimpan melalui `is_valid()`, dan ``save(()``, misalnya pada `POST`, `PUT`, dan `PATCH`.
+
 Penggunaan serializer memiliki beberapa kelebihan dibandingkan membuat dictionary secara manual dengan `JsonResponse` seperti pada Tutorial 05:
 - **Lebih praktis:** Struktur data cukup didefinisikan sekali menggunakan `ModelSerializer`, sehingga tidak perlu menyusun dictionary berulang kali.
 - **Validasi dilakukan secara otomatis:** Aturan validasi dapat ditulis langsung di serializer dan digunakan kembali pada berbagai operasi.
