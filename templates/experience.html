@@ -50,7 +50,7 @@
         </div>
     </section>
 </main>
-{% if user.is_superuser %}
+{% if user.is_superuser or perms.main.change_experience %}
     {% include "components/experience_form_modal.html" %}
 {% endif %}
 {% endblock content %}
@@ -63,7 +63,6 @@
     const EXPERIENCE_LIST_ENDPOINT = "{% url 'api:experience-list' %}";
     const EXPERIENCE_DETAIL_ENDPOINT = "{% url 'api:experience-detail' '00000000-0000-0000-0000-000000000000' %}";
     const EXPERIENCE_STAR_ENDPOINT = "{% url 'api:experience-star' '00000000-0000-0000-0000-000000000000' %}";
-    const EDIT_EXPERIENCE_PAGE = "{% url 'main:edit_experience' '00000000-0000-0000-0000-000000000000' %}";
     const LOGIN_URL = "{% url 'main:login' %}";
     const IS_SUPERUSER = "{{ user.is_superuser|yesno:'true,false' }}" === "true";
     const CAN_EDIT = "{% if user.is_superuser or perms.main.change_experience %}true{% else %}false{% endif %}" === "true";
@@ -71,6 +70,8 @@
     const SEARCH_DEBOUNCE_DELAY = 300;
     let experienceAbortController;
     let searchDebounceTimer;
+    let editingId = null;                 // null = mode tambah, berisi id = mode edit
+    const experienceById = new Map();     // data terakhir dari API, dipakai untuk mengisi form edit
 
     // Elemen DOM
     const loadingState = document.getElementById('loading');
@@ -80,6 +81,13 @@
     const searchForm = document.getElementById('experience-search-form');
     const searchInput = document.getElementById('search-input');
     const experienceForm = document.getElementById('experience-form');
+    const experienceModal = document.getElementById('add-experience-modal');
+
+    // Modal hanya dirender untuk superuser dan Editor, jadi semua elemen ini bisa null
+    const modalHeading = experienceModal ? experienceModal.querySelector('h1, h2, h3') : null;
+    const modalSubmit = experienceForm ? experienceForm.querySelector('button[type="submit"]') : null;
+    const DEFAULT_HEADING = modalHeading ? modalHeading.textContent : '';
+    const DEFAULT_SUBMIT = modalSubmit ? modalSubmit.textContent : '';
 
     function displayPageSection({ showLoading = false, showError = false, showEmpty = false, showGrid = false }) {
         loadingState.classList.toggle('hide', !showLoading);
@@ -134,8 +142,10 @@
                     <span class="star-count">${item.star_count}</span>
                </a>`;
 
+        // Edit sekarang membuka modal, bukan pindah ke halaman edit lama
         const editHtml = CAN_EDIT
-            ? `<a href="${buildUrl(EDIT_EXPERIENCE_PAGE, item.id)}" class="button button-secondary">Edit</a>`
+            ? `<button type="button" class="button button-secondary"
+                    data-action="edit" data-id="${escapeHtml(item.id)}">Edit</button>`
             : '';
 
         const deleteHtml = IS_SUPERUSER
@@ -158,7 +168,7 @@
         return article;
     }
 
-    // GET daftar dari API DRF
+    // GET daftar dari API DRF (parameter pencarian: ?query=)
     async function fetchExperience(searchQuery = "") {
         if (experienceAbortController) experienceAbortController.abort();
         experienceAbortController = new AbortController();
@@ -167,7 +177,7 @@
             displayPageSection({ showLoading: true });
 
             const url = new URL(EXPERIENCE_LIST_ENDPOINT, window.location.origin);
-            if (searchQuery) url.searchParams.set('title', searchQuery);
+            if (searchQuery) url.searchParams.set('query', searchQuery);
 
             const response = await fetch(url, {
                 headers: { Accept: 'application/json' },
@@ -176,6 +186,8 @@
             if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
             const data = await response.json();
+            experienceById.clear();
+            data.forEach(item => experienceById.set(String(item.id), item));
             gridContainer.replaceChildren(...data.map(buildExperienceCardElement));
             displayPageSection({ showGrid: data.length > 0, showEmpty: data.length === 0 });
         } catch (error) {
@@ -208,11 +220,48 @@
         return data;
     }
 
-    // Tambah experience: kirim JSON, bukan FormData
-    async function addExperience(event) {
+    // ---- Modal tambah / edit ----
+    function setModalMode(isEdit) {
+        if (modalHeading) modalHeading.textContent = isEdit ? 'Edit Experience' : DEFAULT_HEADING;
+        if (modalSubmit) modalSubmit.textContent = isEdit ? 'Simpan Perubahan' : DEFAULT_SUBMIT;
+    }
+
+    function resetModal() {
+        editingId = null;
+        experienceForm.reset();
+        setModalMode(false);
+    }
+
+    function setFieldValue(name, value) {
+        const field = experienceForm.elements[name];
+        if (field) field.value = value ?? '';
+    }
+
+    // datetime-local hanya menerima YYYY-MM-DDTHH:MM, jadi potong detik dan zona waktu dari API
+    function toDatetimeLocal(value) {
+        return value ? String(value).slice(0, 16) : '';
+    }
+
+    function openEditModal(id) {
+        const item = experienceById.get(String(id));
+        if (!item || !experienceModal) return;
+
+        editingId = item.id;
+        setFieldValue('title', item.title);
+        setFieldValue('description', item.description);
+        setFieldValue('category', item.category);
+        setFieldValue('thumbnail', item.thumbnail);
+        setFieldValue('ended_at', toDatetimeLocal(item.ended_at));
+        setModalMode(true);
+        experienceModal.showPopover();
+    }
+
+    // Satu handler untuk tambah (POST) dan edit (PATCH)
+    async function saveExperience(event) {
         event.preventDefault();
         const submitButton = experienceForm.querySelector('button[type="submit"]');
         submitButton.disabled = true;
+        const isEdit = editingId !== null;
 
         try {
             const fields = new FormData(experienceForm);
@@ -225,29 +274,44 @@
             // category tidak boleh null; kalau kosong biarkan server memakai default
             if (payload.category === null) delete payload.category;
 
-            await writeExperience(EXPERIENCE_LIST_ENDPOINT, 'POST', payload);
-            experienceForm.reset();
-            document.getElementById('add-experience-modal').hidePopover();
-            showToast('Berhasil', 'Experience baru berhasil ditambahkan!', 'success');
+            if (isEdit) {
+                await writeExperience(buildUrl(EXPERIENCE_DETAIL_ENDPOINT, editingId), 'PATCH', payload);
+            } else {
+                await writeExperience(EXPERIENCE_LIST_ENDPOINT, 'POST', payload);
+            }
+
+            experienceModal.hidePopover();           // memicu event toggle -> resetModal()
+            showToast('Berhasil',
+                isEdit ? 'Experience berhasil diperbarui!' : 'Experience baru berhasil ditambahkan!',
+                'success');
             await fetchExperience(searchInput.value.trim());
         } catch (error) {
-            showToast('Gagal menambahkan experience', error.message, 'error');
+            // 400 (validasi) dan 403 (ditolak) tampil sebagai toast; modal tetap terbuka
+            showToast(isEdit ? 'Gagal menyimpan perubahan' : 'Gagal menambahkan experience',
+                error.message, 'error');
         } finally {
             submitButton.disabled = false;
         }
     }
 
-    // Modal hanya ada untuk superuser, jadi form bisa bernilai null
-    if (experienceForm) {
-        experienceForm.addEventListener('submit', addExperience);
+    if (experienceForm && experienceModal) {
+        experienceForm.addEventListener('submit', saveExperience);
+        // Setiap modal ditutup (tombol batal, Esc, klik luar), kembalikan ke mode tambah
+        experienceModal.addEventListener('toggle', function (event) {
+            if (event.newState === 'closed') resetModal();
+        });
     }
 
-    // Star & hapus lewat event delegation
+    // Star, edit, dan hapus lewat event delegation
     gridContainer.addEventListener('click', async function (event) {
         const button = event.target.closest('button[data-action]');
         if (!button || button.disabled) return;
 
         const action = button.dataset.action;
+        if (action === 'edit') {
+            openEditModal(button.dataset.id);
+            return;
+        }
         if (action === 'delete' && !window.confirm('Yakin ingin menghapus experience ini?')) return;
 
         button.disabled = true;
